@@ -207,11 +207,16 @@ sum(_Q1, _Q2) ->
 %% @doc
 %% @end
 %%--------------------------------------------------------------------
--spec format(rational()) -> iodata().
+-spec format(rational()) -> binary().
 
 format(Q) ->
-    {rational, A, B} = reduce(normalize(Q)),
-    [integer_to_binary(A), $/, integer_to_binary(B)].
+    case normalize(reduce(Q)) of
+        {rational, A, 1} ->
+            integer_to_binary(A);
+        {rational, A, B} when B =/= 1 ->
+            <<(integer_to_binary(A))/bytes, $/,
+              (integer_to_binary(B))/bytes>>
+    end.
 
 %%--------------------------------------------------------------------
 %% @doc
