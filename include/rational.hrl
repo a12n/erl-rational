@@ -1,0 +1,1 @@
+-define(IS_RATIONAL(Q), is_record(Q, rational, 3)).
