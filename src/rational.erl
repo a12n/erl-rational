@@ -52,7 +52,7 @@ new(_Num) ->
 new(Num, Denom)
   when is_integer(Num),
        is_integer(Denom) ->
-    reduce(normalize({rational, Num, Denom}));
+    normalize(reduce({rational, Num, Denom}));
 
 new(_Num, _Denom) ->
     error(badarg).
