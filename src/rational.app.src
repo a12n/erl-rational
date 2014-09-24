@@ -1,0 +1,7 @@
+%% -*- mode: erlang -*-
+
+{application, rational,
+ [{description, "Rational data type"},
+  {vsn, "0.1.0"},
+  {modules, []},
+  {applications, [kernel, stdlib]}]}.
