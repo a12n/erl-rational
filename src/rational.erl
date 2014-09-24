@@ -46,7 +46,9 @@ new(_Num) ->
 %%--------------------------------------------------------------------
 -spec new(integer(), integer()) -> rational().
 
-new(Num, Denom) when is_integer(Num), is_integer(Denom) ->
+new(Num, Denom)
+  when is_integer(Num),
+       is_integer(Denom) ->
     reduce(normalize({rational, Num, Denom}));
 
 new(_Num, _Denom) ->
@@ -145,7 +147,8 @@ diff(Q1, Q2) ->
 %%--------------------------------------------------------------------
 -spec inv(rational()) -> rational().
 
-inv({rational, A, B}) -> {rational, B, A}.
+inv({rational, A, B}) ->
+    {rational, B, A}.
 
 %%--------------------------------------------------------------------
 %% @doc
@@ -176,7 +179,8 @@ prod(_Q1, _Q2) ->
 %%--------------------------------------------------------------------
 -spec quot(rational(), rational()) -> rational().
 
-quot(Q1, Q2) -> prod(Q1, inv(Q2)).
+quot(Q1, Q2) ->
+    prod(Q1, inv(Q2)).
 
 %%--------------------------------------------------------------------
 %% @doc
@@ -203,6 +207,7 @@ sum(_Q1, _Q2) ->
 -spec gcd(non_neg_integer(), non_neg_integer()) -> non_neg_integer().
 
 gcd(A, 0) -> A;
+
 gcd(A, B) -> gcd(B, A rem B).
 
 %%--------------------------------------------------------------------
