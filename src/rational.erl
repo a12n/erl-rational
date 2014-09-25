@@ -453,6 +453,14 @@ eq_2_test_() ->
       ?_assertNot(eq(new(2), new(-2))),
       ?_assert(eq(new(1, 2), new(2, 4))) ].
 
+inv_1_test_() ->
+    [ ?_assertError(badarith, inv(0)),
+      ?_assertEqual({rational, 1, 2}, inv(2)),
+      ?_assertEqual({rational, 1, 2}, inv(new(2))),
+      ?_assertEqual({rational, 1, 2}, inv(new(2, 1))),
+      ?_assertEqual({rational, 2, -1}, inv(new(-1, 2))),
+      ?_assertEqual({rational, 2, -1}, inv(new(1, -2))) ].
+
 %% TODO
 
 -endif.
