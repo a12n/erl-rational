@@ -1,5 +1,4 @@
+.eunit/
 .rebar/
-deps/
 ebin/
-priv/db/
 rebar
