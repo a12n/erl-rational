@@ -470,6 +470,26 @@ format_1_test_() ->
       ?_assertEqual(<<"1/2">>, format(new(1, 2))),
       ?_assertEqual(<<"-1/2">>, format(new(-1, 2))) ].
 
+parse_1_test_() ->
+    [ ?_assertEqual({ok, {rational, 1, 2}}, parse(<<"1/2">>)),
+      ?_assertEqual({ok, {rational, 0, 1}}, parse(<<"0">>)),
+      ?_assertEqual({ok, {rational, -1, 2}}, parse(<<"-1/2">>)),
+      ?_assertEqual({ok, {rational, -1, 2}}, parse(<<"1/-2">>)),
+      ?_assertEqual({ok, {rational, 1, 2}}, parse(<<"-1/-2">>)),
+      ?_assertEqual({ok, {rational, 1, 2}}, parse(<<"+1/+2">>)),
+      ?_assertEqual({ok, {rational, 355, 113}}, parse(<<"355/113">>)),
+      ?_assertEqual({ok, {rational, 355, 113}}, parse(<<"355/+113">>)),
+      ?_assertEqual({ok, {rational, 355, 113}}, parse(<<"+355/113">>)),
+      ?_assertEqual({error, badarg}, parse(<<>>)),
+      ?_assertEqual({error, badarg}, parse(<<".23">>)),
+      ?_assertEqual({error, badarg}, parse(<<"1.23">>)),
+      ?_assertEqual({error, badarg}, parse(<<" 1/2 ">>)),
+      ?_assertEqual({error, badarg}, parse(<<"1/2 z">>)),
+      ?_assertEqual({error, badarg}, parse(<<"1/0">>)),
+      ?_assertEqual({ok, {rational, 0, 1}}, parse(<<"0/1">>)),
+      ?_assertEqual({ok, {rational, 0, 1}}, parse(<<"0/-1">>)),
+      ?_assertEqual({ok, {rational, 0, 1}}, parse(<<"-0/1">>)) ].
+
 %% TODO
 
 -endif.
