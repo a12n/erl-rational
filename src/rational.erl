@@ -475,7 +475,9 @@ prod_2_test_() ->
 sum_2_test_() ->
     [ ?_assertEqual(new(1), sum(new(1, 2), new(1, 2))),
       ?_assertEqual(new(0), sum(1, -1)),
-      ?_assertEqual(new(1, 2), sum(new(1, 4), new(1, 4))) ].
+      ?_assertEqual(new(1, 2), sum(new(1, 4), new(1, 4))),
+      ?_assertError(badarith, sum(1, 2.34)),
+      ?_assertError(badarith, sum(ok, 1.23)) ].
 
 format_1_test_() ->
     [ ?_assertEqual(<<"1">>, format(1)),
