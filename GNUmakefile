@@ -1,6 +1,7 @@
 .PHONY: all app clean distclean doc shell test
 
 ERL ?= erl
+ERL_FLAGS ?= -smp -pa ebin/ -pa deps/*/ebin/
 REBAR ?= ./rebar
 
 all: $(REBAR)
@@ -17,7 +18,7 @@ rebar:
 	chmod +x $@
 
 shell:
-	$(ERL) -smp -pa ebin/ -pa deps/*/ebin/
+	$(ERL) $(ERL_FLAGS)
 
 test: $(REBAR)
 	$(REBAR) eunit
