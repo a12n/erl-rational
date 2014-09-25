@@ -194,7 +194,14 @@ neg({rational, A, B}) ->
 %% @doc
 %% @end
 %%--------------------------------------------------------------------
--spec prod(rational(), rational()) -> rational().
+-spec prod(integer() | rational(),
+           integer() | rational()) -> rational().
+
+prod(Q, Z) when is_integer(Z) ->
+    prod(Q, new(Z));
+
+prod(Z, Q) when is_integer(Z) ->
+    prod(new(Z), Q);
 
 prod({rational, A, B}, {rational, C, D})
   when is_integer(A), is_integer(B),
