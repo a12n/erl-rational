@@ -490,6 +490,17 @@ parse_1_test_() ->
       ?_assertEqual({ok, {rational, 0, 1}}, parse(<<"0/-1">>)),
       ?_assertEqual({ok, {rational, 0, 1}}, parse(<<"-0/1">>)) ].
 
+to_float_1_test_() ->
+    [ ?_assertEqual(2.0, to_float(new(2))),
+      ?_assertEqual(3.5, to_float(new(7, 2))),
+      ?_assertEqual(-3.5, to_float(new(-7, 2))),
+      ?_assertEqual(3.1415929203539825, to_float(new(355, 113))) ].
+
+from_float_1_test_() ->
+    [ ?_assertEqual(new(7, 2), from_float(3.5)),
+      ?_assertEqual(normalize(new(-7, 2)), normalize(from_float(-3.5))),
+      ?_assertEqual(math:pi(), to_float(from_float(math:pi()))) ].
+
 %% TODO
 
 -endif.
