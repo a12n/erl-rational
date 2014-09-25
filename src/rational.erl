@@ -10,7 +10,7 @@
 -export_type([rational/0, t/0]).
 
 %% API
--export([new/1, new/2]).
+-export([denom/1, new/1, new/2, num/1]).
 
 %% API
 -export([eq/2, ge/2, gt/2, ne/2, le/2, lt/2]).
@@ -40,6 +40,16 @@
 %% @doc
 %% @end
 %%--------------------------------------------------------------------
+-spec denom(rational()) -> integer().
+
+denom({rational, _A, B}) when is_integer(B) -> B;
+
+denom(_Q) -> error(badarg).
+
+%%--------------------------------------------------------------------
+%% @doc
+%% @end
+%%--------------------------------------------------------------------
 -spec new(integer()) -> rational().
 
 new(Num) when is_integer(Num) ->
@@ -61,6 +71,16 @@ new(Num, Denom)
 
 new(_Num, _Denom) ->
     error(badarg).
+
+%%--------------------------------------------------------------------
+%% @doc
+%% @end
+%%--------------------------------------------------------------------
+-spec num(rational()) -> integer().
+
+num({rational, A, _B}) when is_integer(A) -> A;
+
+num(_Q) -> error(badarg).
 
 %%%===================================================================
 %%% API
@@ -457,6 +477,13 @@ reduce({rational, A, B}) ->
                       _Other -> false
                   end) ].
 
+denom_1_test_() ->
+    [ ?_assertEqual(1, denom(new(1))),
+      ?_assertEqual(13, denom(new(2, 13))),
+      ?_assertEqual(1, denom(new(-11))),
+      ?_assertEqual(2, denom(new(11, -2))),
+      ?_assertError(badarg, denom(ok)) ].
+
 new_1_test_() ->
     [ ?_assertEqual({rational, 33, 1}, new(33)),
       ?_assertEqual({rational, 1, 1}, new(1)),
@@ -482,6 +509,13 @@ new_2_test_() ->
       ?_assertError(badarg, new(ok, 2)),
       ?_assertError(badarg, new(1, ok)),
       ?_assertError(badarg, new(2, 0)) ].
+
+num_1_test_() ->
+    [ ?_assertEqual(1, num(new(1))),
+      ?_assertEqual(2, num(new(2, 13))),
+      ?_assertEqual(-11, num(new(-11))),
+      ?_assertEqual(-11, num(new(11, -2))),
+      ?_assertError(badarg, num(ok)) ].
 
 gt_2_test_() ->
     [ ?_assert(gt(1, new(1, 2))),

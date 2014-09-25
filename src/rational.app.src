@@ -2,6 +2,6 @@
 
 {application, rational,
  [{description, "Rational data type"},
-  {vsn, "0.6.1"},
+  {vsn, "0.7.0"},
   {modules, []},
   {applications, [kernel, stdlib]}]}.
