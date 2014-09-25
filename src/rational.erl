@@ -22,7 +22,7 @@
 -export([format/1, parse/1]).
 
 %% API
--export([from_float/2, to_float/1]).
+-export([from_float/1, to_float/1]).
 
 %%%===================================================================
 %%% Types
@@ -255,9 +255,9 @@ parse(Bytes) ->
 %% @doc
 %% @end
 %%--------------------------------------------------------------------
--spec from_float(float(), float()) -> rational().
+-spec from_float(float()) -> rational().
 
-from_float(_R, _Eps) ->
+from_float(_R) ->
     %% TODO
     error(badarg).
 
