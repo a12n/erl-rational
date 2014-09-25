@@ -157,7 +157,8 @@ lt(_Q1, _Q2) ->
 %% @doc
 %% @end
 %%--------------------------------------------------------------------
--spec diff(rational(), rational()) -> rational().
+-spec diff(integer() | rational(),
+           integer() | rational()) -> rational().
 
 diff(Q1, Q2) ->
     sum(Q1, neg(Q2)).
@@ -198,7 +199,8 @@ prod(_Q1, _Q2) ->
 %% @doc
 %% @end
 %%--------------------------------------------------------------------
--spec quot(rational(), rational()) -> rational().
+-spec quot(integer() | rational(),
+           integer() | rational()) -> rational().
 
 quot(Q1, Q2) ->
     prod(Q1, inv(Q2)).
