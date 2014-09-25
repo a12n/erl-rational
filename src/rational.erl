@@ -68,7 +68,14 @@ new(_Num, _Denom) ->
 %% @doc
 %% @end
 %%--------------------------------------------------------------------
--spec eq(rational(), rational()) -> boolean().
+-spec eq(integer() | rational(),
+         integer() | rational()) -> boolean().
+
+eq(Q, Z) when is_integer(Z) ->
+    eq(Q, new(Z));
+
+eq(Z, Q) when is_integer(Z) ->
+    eq(new(Z), Q);
 
 eq({rational, A, B}, {rational, C, D})
   when is_integer(A), is_integer(B),
@@ -82,7 +89,8 @@ eq(_Q1, _Q2) ->
 %% @doc
 %% @end
 %%--------------------------------------------------------------------
--spec ge(rational(), rational()) -> boolean().
+-spec ge(integer() | rational(),
+         integer() | rational()) -> boolean().
 
 ge(Q1, Q2) ->
     not(lt(Q1, Q2)).
@@ -91,7 +99,8 @@ ge(Q1, Q2) ->
 %% @doc
 %% @end
 %%--------------------------------------------------------------------
--spec gt(rational(), rational()) -> boolean().
+-spec gt(integer() | rational(),
+         integer() | rational()) -> boolean().
 
 gt(Q1, Q2) ->
     lt(Q2, Q1).
@@ -100,7 +109,8 @@ gt(Q1, Q2) ->
 %% @doc
 %% @end
 %%--------------------------------------------------------------------
--spec ne(rational(), rational()) -> boolean().
+-spec ne(integer() | rational(),
+         integer() | rational()) -> boolean().
 
 ne(Q1, Q2) ->
     not(eq(Q1, Q2)).
@@ -109,7 +119,8 @@ ne(Q1, Q2) ->
 %% @doc
 %% @end
 %%--------------------------------------------------------------------
--spec le(rational(), rational()) -> boolean().
+-spec le(integer() | rational(),
+         integer() | rational()) -> boolean().
 
 le(Q1, Q2) ->
     not(lt(Q2, Q1)).
@@ -118,7 +129,14 @@ le(Q1, Q2) ->
 %% @doc
 %% @end
 %%--------------------------------------------------------------------
--spec lt(rational(), rational()) -> boolean().
+-spec lt(integer() | rational(),
+         integer() | rational()) -> boolean().
+
+lt(Z, Q) when is_integer(Z) ->
+    lt(new(Z), Q);
+
+lt(Q, Z) when is_integer(Z) ->
+    lt(Q, new(Z));
 
 lt(Q1 = {rational, _A, B}, Q2) when B < 0 ->
     lt(normalize(Q1), Q2);
@@ -142,7 +160,8 @@ lt(_Q1, _Q2) ->
 %% @doc
 %% @end
 %%--------------------------------------------------------------------
--spec diff(rational(), rational()) -> rational().
+-spec diff(integer() | rational(),
+           integer() | rational()) -> rational().
 
 diff(Q1, Q2) ->
     sum(Q1, neg(Q2)).
@@ -151,16 +170,25 @@ diff(Q1, Q2) ->
 %% @doc
 %% @end
 %%--------------------------------------------------------------------
--spec inv(rational()) -> rational().
+-spec inv(integer() | rational()) -> rational().
+
+inv(Z) when is_integer(Z), Z =/= 0 ->
+    inv(new(Z));
 
 inv({rational, A, B}) ->
-    {rational, B, A}.
+    {rational, B, A};
+
+inv(_Q) ->
+    error(badarith).
 
 %%--------------------------------------------------------------------
 %% @doc
 %% @end
 %%--------------------------------------------------------------------
--spec neg(rational()) -> rational().
+-spec neg(integer() | rational()) -> rational().
+
+neg(Z) when is_integer(Z) ->
+    neg(new(Z));
 
 neg({rational, A, B}) ->
     {rational, -A, B}.
@@ -169,7 +197,14 @@ neg({rational, A, B}) ->
 %% @doc
 %% @end
 %%--------------------------------------------------------------------
--spec prod(rational(), rational()) -> rational().
+-spec prod(integer() | rational(),
+           integer() | rational()) -> rational().
+
+prod(Q, Z) when is_integer(Z) ->
+    prod(Q, new(Z));
+
+prod(Z, Q) when is_integer(Z) ->
+    prod(new(Z), Q);
 
 prod({rational, A, B}, {rational, C, D})
   when is_integer(A), is_integer(B),
@@ -183,7 +218,8 @@ prod(_Q1, _Q2) ->
 %% @doc
 %% @end
 %%--------------------------------------------------------------------
--spec quot(rational(), rational()) -> rational().
+-spec quot(integer() | rational(),
+           integer() | rational()) -> rational().
 
 quot(Q1, Q2) ->
     prod(Q1, inv(Q2)).
@@ -192,7 +228,14 @@ quot(Q1, Q2) ->
 %% @doc
 %% @end
 %%--------------------------------------------------------------------
--spec sum(rational(), rational()) -> rational().
+-spec sum(integer() | rational(),
+          integer() | rational()) -> rational().
+
+sum(Q, Z) when is_integer(Z) ->
+    sum(Q, new(Z));
+
+sum(Z, Q) when is_integer(Z) ->
+    sum(new(Z), Q);
 
 sum({rational, A, B}, {rational, C, D})
   when is_integer(A), is_integer(B),
