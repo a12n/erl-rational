@@ -456,6 +456,12 @@ eq_2_test_() ->
       ?_assertNot(eq(new(2), new(-2))),
       ?_assert(eq(new(1, 2), new(2, 4))) ].
 
+diff_2_test_() ->
+    [ ?_assertEqual(new(0), diff(1, 1)),
+      ?_assertEqual(new(1), diff(new(12), new(11))),
+      ?_assertEqual(new(-1), diff(11, new(12, 1))),
+      ?_assertError(badarith, diff(1.23, 1)) ].
+
 inv_1_test_() ->
     [ ?_assertError(badarith, inv(0)),
       ?_assertEqual({rational, 1, 2}, inv(2)),
