@@ -461,6 +461,12 @@ inv_1_test_() ->
       ?_assertEqual({rational, 2, -1}, inv(new(-1, 2))),
       ?_assertEqual({rational, 2, -1}, inv(new(1, -2))) ].
 
+format_1_test_() ->
+    [ ?_assertEqual(<<"1">>, format(1)),
+      ?_assertEqual(<<"-1">>, format(-1)),
+      ?_assertEqual(<<"1/2">>, format(new(1, 2))),
+      ?_assertEqual(<<"-1/2">>, format(new(-1, 2))) ].
+
 %% TODO
 
 -endif.
