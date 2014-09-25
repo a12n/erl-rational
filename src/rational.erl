@@ -464,6 +464,17 @@ inv_1_test_() ->
       ?_assertEqual({rational, 2, -1}, inv(new(-1, 2))),
       ?_assertEqual({rational, 2, -1}, inv(new(1, -2))) ].
 
+prod_2_test_() ->
+    [ ?_assertEqual(new(1), prod(new(1, 2), 2)),
+      ?_assertEqual(new(1), prod(2, new(1, 2))),
+      ?_assertEqual(new(1), prod(new(3, 43), inv(new(3, 43)))),
+      ?_assertEqual(new(1), prod(new(-3, 43), inv(new(-3, 43)))) ].
+
+sum_2_test_() ->
+    [ ?_assertEqual(new(1), sum(new(1, 2), new(1, 2))),
+      ?_assertEqual(new(0), sum(1, -1)),
+      ?_assertEqual(new(1, 2), sum(new(1, 4), new(1, 4))) ].
+
 format_1_test_() ->
     [ ?_assertEqual(<<"1">>, format(1)),
       ?_assertEqual(<<"-1">>, format(-1)),
