@@ -51,7 +51,7 @@ new(_Num) ->
 
 new(Num, Denom)
   when is_integer(Num),
-       is_integer(Denom) ->
+       is_integer(Denom), Denom =/= 0 ->
     normalize(reduce({rational, Num, Denom}));
 
 new(_Num, _Denom) ->
@@ -232,7 +232,7 @@ parse(Bytes) ->
          (<<$/, Bytes1/bytes>>, Num) ->
               parse_integer(
                 Bytes1,
-                fun(<<>>, Denom) ->
+                fun(<<>>, Denom) when Denom =/= 0 ->
                         {ok, new(Num, Denom)};
                    (_Bytes2, _Denom) ->
                         {error, badarg}
