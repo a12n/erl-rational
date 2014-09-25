@@ -175,7 +175,7 @@ diff(Q1, Q2) ->
 inv(Z) when is_integer(Z), Z =/= 0 ->
     inv(new(Z));
 
-inv({rational, A, B}) ->
+inv({rational, A, B}) when A =/= 0 ->
     {rational, B, A};
 
 inv(_Q) ->
