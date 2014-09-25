@@ -182,7 +182,10 @@ inv(_Q) ->
 %% @doc
 %% @end
 %%--------------------------------------------------------------------
--spec neg(rational()) -> rational().
+-spec neg(integer() | rational()) -> rational().
+
+neg(Z) when is_integer(Z) ->
+    neg(new(Z));
 
 neg({rational, A, B}) ->
     {rational, -A, B}.
