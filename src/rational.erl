@@ -285,7 +285,7 @@ format(Q = {rational, A, B})
     case normalize(reduce(Q)) of
         {rational, C, 1} ->
             integer_to_binary(C);
-        {rational, C, D} when D =/= 1 ->
+        {rational, C, D} ->
             <<(integer_to_binary(C))/bytes, $/,
               (integer_to_binary(D))/bytes>>
     end;
