@@ -123,7 +123,14 @@ le(Q1, Q2) ->
 %% @doc
 %% @end
 %%--------------------------------------------------------------------
--spec lt(rational(), rational()) -> boolean().
+-spec lt(integer() | rational(),
+         integer() | rational()) -> boolean().
+
+lt(Z, Q) when is_integer(Z) ->
+    lt(new(Z), Q);
+
+lt(Q, Z) when is_integer(Z) ->
+    lt(Q, new(Z));
 
 lt(Q1 = {rational, _A, B}, Q2) when B < 0 ->
     lt(normalize(Q1), Q2);
