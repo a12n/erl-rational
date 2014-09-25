@@ -280,14 +280,18 @@ sum(_Q1, _Q2) ->
 format(Z) when is_integer(Z) ->
     integer_to_binary(Z);
 
-format(Q) ->
+format(Q = {rational, A, B})
+  when is_integer(A), is_integer(B) ->
     case normalize(reduce(Q)) of
-        {rational, A, 1} ->
-            integer_to_binary(A);
-        {rational, A, B} when B =/= 1 ->
-            <<(integer_to_binary(A))/bytes, $/,
-              (integer_to_binary(B))/bytes>>
-    end.
+        {rational, C, 1} ->
+            integer_to_binary(C);
+        {rational, C, D} when D =/= 1 ->
+            <<(integer_to_binary(C))/bytes, $/,
+              (integer_to_binary(D))/bytes>>
+    end;
+
+format(_Q) ->
+    error(badarg).
 
 %%--------------------------------------------------------------------
 %% @doc
