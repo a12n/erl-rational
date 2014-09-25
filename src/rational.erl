@@ -472,6 +472,12 @@ eq_2_test_() ->
       ?_assertNot(eq(new(2), new(-2))),
       ?_assert(eq(new(1, 2), new(2, 4))) ].
 
+ne_2_test_() ->
+    [ ?_assert(ne(new(1), new(2))),
+      ?_assertNot(ne(new(1, -12), new(1, -12))),
+      ?_assertError(badarith, ne(1.23, 1.23)),
+      ?_assertError(badarith, ne(ok, ok)) ].
+
 diff_2_test_() ->
     [ ?_assertEqual(new(0), diff(1, 1)),
       ?_assertEqual(new(1), diff(new(12), new(11))),
