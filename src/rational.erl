@@ -65,7 +65,14 @@ new(_Num, _Denom) ->
 %% @doc
 %% @end
 %%--------------------------------------------------------------------
--spec eq(rational(), rational()) -> boolean().
+-spec eq(integer() | rational(),
+         integer() | rational()) -> boolean().
+
+eq(Q, Z) when is_integer(Z) ->
+    eq(Q, new(Z));
+
+eq(Z, Q) when is_integer(Z) ->
+    eq(new(Z), Q);
 
 eq({rational, A, B}, {rational, C, D})
   when is_integer(A), is_integer(B),
