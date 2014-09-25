@@ -373,7 +373,7 @@ reduce({rational, A, B}) ->
 
 -include_lib("eunit/include/eunit.hrl").
 
-num_1_test_() ->
+new_1_test_() ->
     [ ?_assertEqual({rational, 33, 1}, new(33)),
       ?_assertEqual({rational, 1, 1}, new(1)),
       ?_assertEqual({rational, 0, 1}, new(0)),
