@@ -494,10 +494,14 @@ to_float_1_test_() ->
     [ ?_assertEqual(2.0, to_float(new(2))),
       ?_assertEqual(3.5, to_float(new(7, 2))),
       ?_assertEqual(-3.5, to_float(new(-7, 2))),
-      ?_assertEqual(3.1415929203539825, to_float(new(355, 113))) ].
+      ?_assertEqual(3.1415929203539825, to_float(new(355, 113))),
+      ?_assertError(badarg, to_float(1.234)),
+      ?_assertError(badarg, to_float(ok)) ].
 
 from_float_1_test_() ->
     [ ?_assertEqual(new(7, 2), from_float(3.5)),
+      ?_assertEqual(new(3), from_float(3)),
+      ?_assertEqual(new(-3), from_float(-3)),
       ?_assertEqual(normalize(new(-7, 2)), normalize(from_float(-3.5))),
       ?_assertEqual(math:pi(), to_float(from_float(math:pi()))) ].
 
