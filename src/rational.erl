@@ -472,6 +472,13 @@ prod_2_test_() ->
       ?_assertError(badarith, prod(1.23, 4)),
       ?_assertError(badarith, prod(new(1), ok)) ].
 
+quot_2_test_() ->
+    [ ?_assertEqual(new(1, 2), quot(1, 2)),
+      ?_assertEqual(normalize(new(-1, 4)), normalize(quot(-1, new(4, 1)))),
+      ?_assertError(badarith, quot(new(2), new(0))),
+      ?_assertError(badarith, quot(new(2), ok)),
+      ?_assertError(badarith, quot(new(2), 1.2)) ].
+
 sum_2_test_() ->
     [ ?_assertEqual(new(1), sum(new(1, 2), new(1, 2))),
       ?_assertEqual(new(0), sum(1, -1)),
