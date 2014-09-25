@@ -479,6 +479,13 @@ le_2_test_() ->
       ?_assert(le(new(-1, 2), new(-1, 4))),
       ?_assertError(badarith, le(ok, 2)) ].
 
+lt_2_test_() ->
+    [ ?_assert(lt({rational, 1, -2}, {rational, 1, -4})),
+      ?_assert(lt(new(-1, 2), new(-1, 4))),
+      ?_assert(lt(new(-1, 2), 0)),
+      ?_assertNot(lt(new(-1, 2), new(-1, 2))),
+      ?_assertError(badarith, lt(1, ok)) ].
+
 ne_2_test_() ->
     [ ?_assert(ne(new(1), new(2))),
       ?_assertNot(ne(new(1, -12), new(1, -12))),
