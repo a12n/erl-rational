@@ -86,7 +86,8 @@ eq(_Q1, _Q2) ->
 %% @doc
 %% @end
 %%--------------------------------------------------------------------
--spec ge(rational(), rational()) -> boolean().
+-spec ge(integer() | rational(),
+         integer() | rational()) -> boolean().
 
 ge(Q1, Q2) ->
     not(lt(Q1, Q2)).
@@ -95,7 +96,8 @@ ge(Q1, Q2) ->
 %% @doc
 %% @end
 %%--------------------------------------------------------------------
--spec gt(rational(), rational()) -> boolean().
+-spec gt(integer() | rational(),
+         integer() | rational()) -> boolean().
 
 gt(Q1, Q2) ->
     lt(Q2, Q1).
@@ -114,7 +116,8 @@ ne(Q1, Q2) ->
 %% @doc
 %% @end
 %%--------------------------------------------------------------------
--spec le(rational(), rational()) -> boolean().
+-spec le(integer() | rational(),
+         integer() | rational()) -> boolean().
 
 le(Q1, Q2) ->
     not(lt(Q2, Q1)).
