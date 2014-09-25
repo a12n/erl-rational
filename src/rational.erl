@@ -445,6 +445,16 @@ new_2_test_() ->
       ?_assertError(badarg, new(1, ok)),
       ?_assertError(badarg, new(2, 0)) ].
 
+gt_2_test_() ->
+    [ ?_assert(gt(1, new(1, 2))),
+      ?_assert(gt(1, new(1, 4))),
+      ?_assert(gt(0, new(-1, 10))),
+      ?_assertNot(gt(0, new(0, 1))),
+      ?_assert(gt(3, -1)),
+      ?_assertNot(gt(-1, 3)),
+      ?_assertNot(gt(3, 3)),
+      ?_assertError(badarith, gt(ok, 1)) ].
+
 eq_2_test_() ->
     [ ?_assertError(badarith, eq(1, 2.3)),
       ?_assertError(badarith, eq(1.2, 3)),
