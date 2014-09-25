@@ -317,3 +317,15 @@ parse_positive(Bytes, Ans, Fun) ->
 reduce({rational, A, B}) ->
     K = gcd(A, B),
     {rational, A div K, B div K}.
+
+%%%===================================================================
+%%% Tests
+%%%===================================================================
+
+-ifdef(TEST).
+
+-include_lib("eunit/include/eunit.hrl").
+
+%% TODO
+
+-endif.
