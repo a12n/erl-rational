@@ -468,7 +468,9 @@ prod_2_test_() ->
     [ ?_assertEqual(new(1), prod(new(1, 2), 2)),
       ?_assertEqual(new(1), prod(2, new(1, 2))),
       ?_assertEqual(new(1), prod(new(3, 43), inv(new(3, 43)))),
-      ?_assertEqual(new(1), prod(new(-3, 43), inv(new(-3, 43)))) ].
+      ?_assertEqual(new(1), prod(new(-3, 43), inv(new(-3, 43)))),
+      ?_assertError(badarith, prod(1.23, 4)),
+      ?_assertError(badarith, prod(new(1), ok)) ].
 
 sum_2_test_() ->
     [ ?_assertEqual(new(1), sum(new(1, 2), new(1, 2))),
