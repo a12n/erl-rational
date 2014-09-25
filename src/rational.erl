@@ -472,6 +472,13 @@ eq_2_test_() ->
       ?_assertNot(eq(new(2), new(-2))),
       ?_assert(eq(new(1, 2), new(2, 4))) ].
 
+le_2_test_() ->
+    [ ?_assert(le(new(-1, 2), new(1, 2))),
+      ?_assert(le(new(-1, 2), 0)),
+      ?_assert(le(new(-1, 2), new(-1, 2))),
+      ?_assert(le(new(-1, 2), new(-1, 4))),
+      ?_assertError(badarith, le(ok, 2)) ].
+
 ne_2_test_() ->
     [ ?_assert(ne(new(1), new(2))),
       ?_assertNot(ne(new(1, -12), new(1, -12))),
