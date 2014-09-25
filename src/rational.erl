@@ -445,6 +445,10 @@ new_2_test_() ->
 eq_2_test_() ->
     [ ?_assertError(badarith, eq(1, 2.3)),
       ?_assertError(badarith, eq(1.2, 3)),
+      ?_assert(eq(2, 2)),
+      ?_assert(eq(new(2), 2)),
+      ?_assert(eq(2, new(2))),
+      ?_assertNot(eq(2, 3)),
       ?_assert(eq(new(2), new(2))),
       ?_assertNot(eq(new(2), new(-2))),
       ?_assert(eq(new(1, 2), new(2, 4))) ].
