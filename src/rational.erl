@@ -167,10 +167,16 @@ diff(Q1, Q2) ->
 %% @doc
 %% @end
 %%--------------------------------------------------------------------
--spec inv(rational()) -> rational().
+-spec inv(integer() | rational()) -> rational().
+
+inv(Z) when is_integer(Z), Z =/= 0 ->
+    inv(new(Z));
 
 inv({rational, A, B}) ->
-    {rational, B, A}.
+    {rational, B, A};
+
+inv(_Q) ->
+    error(badarith).
 
 %%--------------------------------------------------------------------
 %% @doc
