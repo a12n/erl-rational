@@ -421,14 +421,42 @@ reduce({rational, A, B}) ->
 -include_lib("eunit/include/eunit.hrl").
 
 'IS_RATIONAL_1_test_'() ->
-    [ ?_assert(?IS_RATIONAL(new(1))),
-      ?_assert(?IS_RATIONAL(new(0, 2))),
-      ?_assertNot(?IS_RATIONAL(1)),
-      ?_assertNot(?IS_RATIONAL({a, b, c})),
-      ?_assertNot(?IS_RATIONAL(false)),
-      ?_assertNot(?IS_RATIONAL(1.234)),
-      ?_assert(?IS_RATIONAL({rational, 1, 2})),
-      ?_assertNot(?IS_RATIONAL({rational, ok, false})) ].
+    [ ?_assert(case new(1) of
+                   Q when ?IS_RATIONAL(Q) -> true;
+                   _Other -> false
+               end),
+      ?_assert(case new(0, 2) of
+                   Q when ?IS_RATIONAL(Q) -> true;
+                   _Other -> false
+               end),
+      ?_assertNot(case 1 of
+                      Q when ?IS_RATIONAL(Q) -> true;
+                      _Other -> false
+                  end),
+      ?_assertNot(case {a, b, c} of
+                      Q when ?IS_RATIONAL(Q) -> true;
+                      _Other -> false
+                  end),
+      ?_assertNot(case false of
+                      Q when ?IS_RATIONAL(Q) -> true;
+                      _Other -> false
+                  end),
+      ?_assertNot(case 1.234 of
+                      Q when ?IS_RATIONAL(Q) -> true;
+                      _Other -> false
+                  end),
+      ?_assert(case {rational, 1, 2} of
+                   Q when ?IS_RATIONAL(Q) -> true;
+                   _Other -> false
+               end),
+      ?_assertNot(case {rational, ok, error} of
+                      Q when ?IS_RATIONAL(Q) -> true;
+                      _Other -> false
+                  end),
+      ?_assertNot(case {ok, 1, 2} of
+                      Q when ?IS_RATIONAL(Q) -> true;
+                      _Other -> false
+                  end) ].
 
 new_1_test_() ->
     [ ?_assertEqual({rational, 33, 1}, new(33)),
