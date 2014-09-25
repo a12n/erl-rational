@@ -253,7 +253,10 @@ sum(_Q1, _Q2) ->
 %% @doc
 %% @end
 %%--------------------------------------------------------------------
--spec format(rational()) -> binary().
+-spec format(integer() | rational()) -> binary().
+
+format(Z) when is_integer(Z) ->
+    integer_to_binary(Z);
 
 format(Q) ->
     case normalize(reduce(Q)) of
