@@ -386,6 +386,19 @@ new_1_test_() ->
       ?_assertError(badarg, new(ok)),
       ?_assertError(badarg, new(make_ref())) ].
 
+new_2_test_() ->
+    [ ?_assertEqual({rational, 1, 2}, new(1, 2)),
+      ?_assertEqual({rational, 1, 2}, new(2, 4)),
+      ?_assertEqual({rational, 0, 1}, new(0, 2)),
+      ?_assertEqual({rational, 0, 1}, new(0, -2)),
+      ?_assertEqual({rational, -1, 2}, new(-1, 2)),
+      ?_assertEqual({rational, -1, 2}, new(1, -2)),
+      ?_assertEqual({rational, 1, 2}, new(-1, -2)),
+      ?_assertError(badarg, new(1.23, 4.56)),
+      ?_assertError(badarg, new(ok, 2)),
+      ?_assertError(badarg, new(1, ok)),
+      ?_assertError(badarg, new(2, 0)) ].
+
 %% TODO
 
 -endif.
