@@ -7,7 +7,7 @@
 -module(rational).
 
 %% Types
--export_type([rational/0]).
+-export_type([rational/0, t/0]).
 
 %% API
 -export([new/1, new/2]).
@@ -29,6 +29,8 @@
 %%%===================================================================
 
 -type rational() :: {rational, integer(), integer()}.
+
+-type t() :: rational().
 
 %%%===================================================================
 %%% API
