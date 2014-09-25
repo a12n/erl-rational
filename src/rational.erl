@@ -225,7 +225,14 @@ quot(Q1, Q2) ->
 %% @doc
 %% @end
 %%--------------------------------------------------------------------
--spec sum(rational(), rational()) -> rational().
+-spec sum(integer() | rational(),
+          integer() | rational()) -> rational().
+
+sum(Q, Z) when is_integer(Z) ->
+    sum(Q, new(Z));
+
+sum(Z, Q) when is_integer(Z) ->
+    sum(new(Z), Q);
 
 sum({rational, A, B}, {rational, C, D})
   when is_integer(A), is_integer(B),
