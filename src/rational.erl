@@ -417,7 +417,18 @@ reduce({rational, A, B}) ->
 
 -ifdef(TEST).
 
+-include("rational.hrl").
 -include_lib("eunit/include/eunit.hrl").
+
+'IS_RATIONAL_1_test_'() ->
+    [ ?_assert(?IS_RATIONAL(new(1))),
+      ?_assert(?IS_RATIONAL(new(0, 2))),
+      ?_assertNot(?IS_RATIONAL(1)),
+      ?_assertNot(?IS_RATIONAL({a, b, c})),
+      ?_assertNot(?IS_RATIONAL(false)),
+      ?_assertNot(?IS_RATIONAL(1.234)),
+      ?_assert(?IS_RATIONAL({rational, 1, 2})),
+      ?_assertNot(?IS_RATIONAL({rational, ok, false})) ].
 
 new_1_test_() ->
     [ ?_assertEqual({rational, 33, 1}, new(33)),
