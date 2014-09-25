@@ -373,6 +373,19 @@ reduce({rational, A, B}) ->
 
 -include_lib("eunit/include/eunit.hrl").
 
+num_1_test_() ->
+    [ ?_assertEqual({rational, 33, 1}, new(33)),
+      ?_assertEqual({rational, 1, 1}, new(1)),
+      ?_assertEqual({rational, 0, 1}, new(0)),
+      ?_assertEqual({rational, -1, 1}, new(-1)),
+      ?_assertEqual({rational, -33, 1}, new(-33)),
+      ?_assertError(badarg, new([])),
+      ?_assertError(badarg, new(<<"a">>)),
+      ?_assertError(badarg, new(1.234)),
+      ?_assertError(badarg, new(self())),
+      ?_assertError(badarg, new(ok)),
+      ?_assertError(badarg, new(make_ref())) ].
+
 %% TODO
 
 -endif.
