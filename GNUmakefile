@@ -11,7 +11,7 @@ clean: $(REBAR)
 	$(REBAR) clean
 
 distclean: clean
-	rm -rf .eunit
+	rm -rf .eunit .rebar ebin rebar
 
 rebar:
 	wget "https://github.com/rebar/rebar/releases/download/2.5.1/rebar" -O $@
