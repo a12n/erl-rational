@@ -104,7 +104,8 @@ gt(Q1, Q2) ->
 %% @doc
 %% @end
 %%--------------------------------------------------------------------
--spec ne(rational(), rational()) -> boolean().
+-spec ne(integer() | rational(),
+         integer() | rational()) -> boolean().
 
 ne(Q1, Q2) ->
     not(eq(Q1, Q2)).
