@@ -422,12 +422,10 @@ reduce({rational, A, B}) ->
 
 'IS_RATIONAL_1_test_'() ->
     [ ?_assert(case new(1) of
-                   Q when ?IS_RATIONAL(Q) -> true;
-                   _Other -> false
+                   Q when ?IS_RATIONAL(Q) -> true
                end),
       ?_assert(case new(0, 2) of
-                   Q when ?IS_RATIONAL(Q) -> true;
-                   _Other -> false
+                   Q when ?IS_RATIONAL(Q) -> true
                end),
       ?_assertNot(case 1 of
                       Q when ?IS_RATIONAL(Q) -> true;
@@ -446,8 +444,7 @@ reduce({rational, A, B}) ->
                       _Other -> false
                   end),
       ?_assert(case {rational, 1, 2} of
-                   Q when ?IS_RATIONAL(Q) -> true;
-                   _Other -> false
+                   Q when ?IS_RATIONAL(Q) -> true
                end),
       ?_assertNot(case {rational, ok, error} of
                       Q when ?IS_RATIONAL(Q) -> true;
