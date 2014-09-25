@@ -381,7 +381,7 @@ from_float(X, 0) ->
 from_float(X, K) ->
     N = trunc(X),
     case X - N of
-        F when F =:= 0; F =:= 0.0 -> new(N);
+        F when F == 0 -> new(N);
         F -> sum(new(N), inv(from_float(1 / F, K - 1)))
     end.
 
