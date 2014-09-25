@@ -257,9 +257,8 @@ parse(Bytes) ->
 %%--------------------------------------------------------------------
 -spec from_float(float()) -> rational().
 
-from_float(_R) ->
-    %% TODO
-    error(badarg).
+from_float(X) ->
+    from_float(X, 21).
 
 %%--------------------------------------------------------------------
 %% @doc
@@ -288,6 +287,23 @@ to_float(_Q) ->
 gcd(A, 0) -> A;
 
 gcd(A, B) -> gcd(B, A rem B).
+
+%%--------------------------------------------------------------------
+%% @priv
+%% @doc
+%% @end
+%%--------------------------------------------------------------------
+-spec from_float(float(), non_neg_integer()) -> rational().
+
+from_float(X, 0) ->
+    new(trunc(X));
+
+from_float(X, K) ->
+    N = trunc(X),
+    case X - N of
+        F when F =:= 0; F =:= 0.0 -> new(N);
+        F -> sum(new(N), inv(from_float(1 / F, K - 1)))
+    end.
 
 %%--------------------------------------------------------------------
 %% @priv
