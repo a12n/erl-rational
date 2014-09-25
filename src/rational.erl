@@ -211,7 +211,7 @@ prod(Z, Q) when is_integer(Z) ->
 prod({rational, A, B}, {rational, C, D})
   when is_integer(A), is_integer(B),
        is_integer(C), is_integer(D) ->
-    reduce(normalize({rational, (A * C), (B * D)}));
+    normalize(reduce({rational, (A * C), (B * D)}));
 
 prod(_Q1, _Q2) ->
     error(badarith).
@@ -242,7 +242,7 @@ sum(Z, Q) when is_integer(Z) ->
 sum({rational, A, B}, {rational, C, D})
   when is_integer(A), is_integer(B),
        is_integer(C), is_integer(D) ->
-    reduce(normalize({rational, (A * D) + (C * B), (B * D)}));
+    normalize(reduce({rational, (A * D) + (C * B), (B * D)}));
 
 sum(_Q1, _Q2) ->
     error(badarith).
@@ -554,7 +554,7 @@ prod_2_test_() ->
 
 quot_2_test_() ->
     [ ?_assertEqual(new(1, 2), quot(1, 2)),
-      ?_assertEqual(normalize(new(-1, 4)), normalize(quot(-1, new(4, 1)))),
+      ?_assertEqual(new(-1, 4), quot(-1, new(4, 1))),
       ?_assertError(badarith, quot(new(2), new(0))),
       ?_assertError(badarith, quot(new(2), ok)),
       ?_assertError(badarith, quot(new(2), 1.2)) ].
@@ -607,7 +607,7 @@ from_float_1_test_() ->
     [ ?_assertEqual(new(7, 2), from_float(3.5)),
       ?_assertEqual(new(3), from_float(3)),
       ?_assertEqual(new(-3), from_float(-3)),
-      ?_assertEqual(normalize(new(-7, 2)), normalize(from_float(-3.5))),
+      ?_assertEqual(new(-7, 2), from_float(-3.5)),
       ?_assertEqual(math:pi(), to_float(from_float(math:pi()))) ].
 
 %% TODO
