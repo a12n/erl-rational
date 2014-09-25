@@ -398,15 +398,18 @@ normalize(Q) ->
 
 parse_integer(<<$-, C, Other/bytes>>, Fun)
   when C >= $0, C =< $9 ->
-    parse_positive(Other, C - $0, fun(Bytes1, Pos) -> Fun(Bytes1, -Pos) end);
+    parse_non_neg_integer(Other, C - $0,
+                          fun(Bytes1, N) ->
+                                  Fun(Bytes1, -N)
+                          end);
 
 parse_integer(<<$+, C, Other/bytes>>, Fun)
   when C >= $0, C =< $9 ->
-    parse_positive(Other, C - $0, Fun);
+    parse_non_neg_integer(Other, C - $0, Fun);
 
 parse_integer(<<C, Other/bytes>>, Fun)
   when C >= $0, C =< $9 ->
-    parse_positive(Other, C - $0, Fun);
+    parse_non_neg_integer(Other, C - $0, Fun);
 
 parse_integer(_Bytes, _Fun) ->
     {error, badarg}.
@@ -416,14 +419,15 @@ parse_integer(_Bytes, _Fun) ->
 %% @doc
 %% @end
 %%--------------------------------------------------------------------
--spec parse_positive(binary(), non_neg_integer(), fun()) -> no_return().
+-spec parse_non_neg_integer(binary(), non_neg_integer(), fun()) ->
+                                   no_return().
 
-parse_positive(<<C, Other/bytes>>, Ans, Fun)
+parse_non_neg_integer(<<C, Other/bytes>>, N, Fun)
   when C >= $0, C =< $9 ->
-    parse_positive(Other, (Ans * 10) + (C - $0), Fun);
+    parse_non_neg_integer(Other, (N * 10) + (C - $0), Fun);
 
-parse_positive(Bytes, Ans, Fun) ->
-    Fun(Bytes, Ans).
+parse_non_neg_integer(Bytes, N, Fun) ->
+    Fun(Bytes, N).
 
 %%--------------------------------------------------------------------
 %% @priv
