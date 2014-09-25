@@ -224,9 +224,24 @@ format(Q) ->
 %%--------------------------------------------------------------------
 -spec parse(binary()) -> {ok, rational()} | {error, badarg}.
 
-parse(_Bytes) ->
-    %% TODO
-    {error, badarg}.
+parse(Bytes) ->
+    parse_integer(
+      Bytes,
+      fun(<<>>, Num) ->
+              {ok, new(Num)};
+         (<<$/, Bytes1/bytes>>, Num) ->
+              parse_integer(
+                Bytes1,
+                fun(<<>>, Denom) ->
+                        {ok, new(Num, Denom)};
+                   (_Bytes2, _Denom) ->
+                        {error, badarg}
+                end
+               );
+         (_Bytes1, _Num) ->
+              {error, badarg}
+      end
+     ).
 
 %%%===================================================================
 %%% Internal functions
@@ -255,6 +270,42 @@ normalize({rational, A, B}) when B < 0 ->
 
 normalize(Q) ->
     Q.
+
+%%--------------------------------------------------------------------
+%% @priv
+%% @doc
+%% @end
+%%--------------------------------------------------------------------
+-spec parse_integer(binary(), fun()) -> {error, badarg}.
+
+parse_integer(<<$-, C, Other/bytes>>, Fun)
+  when C >= $0, C =< $9 ->
+    parse_positive(Other, C - $0, fun(Bytes1, Pos) -> Fun(Bytes1, -Pos) end);
+
+parse_integer(<<$+, C, Other/bytes>>, Fun)
+  when C >= $0, C =< $9 ->
+    parse_positive(Other, C - $0, Fun);
+
+parse_integer(<<C, Other/bytes>>, Fun)
+  when C >= $0, C =< $9 ->
+    parse_positive(Other, C - $0, Fun);
+
+parse_integer(_Bytes, _Fun) ->
+    {error, badarg}.
+
+%%--------------------------------------------------------------------
+%% @priv
+%% @doc
+%% @end
+%%--------------------------------------------------------------------
+-spec parse_positive(binary(), non_neg_integer(), fun()) -> no_return().
+
+parse_positive(<<C, Other/bytes>>, Ans, Fun)
+  when C >= $0, C =< $9 ->
+    parse_positive(Other, (Ans * 10) + (C - $0), Fun);
+
+parse_positive(Bytes, Ans, Fun) ->
+    Fun(Bytes, Ans).
 
 %%--------------------------------------------------------------------
 %% @priv
