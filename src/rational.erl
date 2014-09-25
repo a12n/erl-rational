@@ -314,7 +314,6 @@ parse(Bytes) ->
       end
      ).
 
-
 %%%===================================================================
 %%% API
 %%%===================================================================
@@ -644,7 +643,5 @@ from_float_1_test_() ->
       ?_assertEqual(new(-7, 2), from_float(-3.5)),
       ?_assertEqual(math:pi(), to_float(from_float(math:pi()))),
       ?_assertError(badarg, from_float(ok)) ].
-
-%% TODO
 
 -endif.
