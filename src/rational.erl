@@ -483,7 +483,10 @@ format_1_test_() ->
     [ ?_assertEqual(<<"1">>, format(1)),
       ?_assertEqual(<<"-1">>, format(-1)),
       ?_assertEqual(<<"1/2">>, format(new(1, 2))),
-      ?_assertEqual(<<"-1/2">>, format(new(-1, 2))) ].
+      ?_assertEqual(<<"-1/2">>, format(new(-1, 2))),
+      ?_assertEqual(<<"355/113">>, format(new(355, 113))),
+      ?_assertEqual(<<"2">>, format(new(4, 2))),
+      ?_assertEqual(<<"-2">>, format(new(-4, 2))) ].
 
 parse_1_test_() ->
     [ ?_assertEqual({ok, {rational, 1, 2}}, parse(<<"1/2">>)),
