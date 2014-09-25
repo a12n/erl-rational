@@ -38,6 +38,8 @@
 
 %%--------------------------------------------------------------------
 %% @doc
+%% Returns denominator `B' of the rational `Q = A/B'. Raises `badarg'
+%% error on invalid input.
 %% @end
 %%--------------------------------------------------------------------
 -spec denom(rational()) -> integer().
@@ -48,6 +50,8 @@ denom(_Q) -> error(badarg).
 
 %%--------------------------------------------------------------------
 %% @doc
+%% Constructs new rational number `Q = A/1' out of integer `A'. Raises
+%% `badarg' error on invalid input.
 %% @end
 %%--------------------------------------------------------------------
 -spec new(integer()) -> rational().
@@ -60,6 +64,9 @@ new(_Num) ->
 
 %%--------------------------------------------------------------------
 %% @doc
+%% Constructs new rational number `Q = A/B' out of numerator `A' and
+%% non-zero denominator `B'. Raises `badarg' error on invalid input
+%% (non-integer arguments, zero denominator).
 %% @end
 %%--------------------------------------------------------------------
 -spec new(integer(), integer()) -> rational().
@@ -74,6 +81,8 @@ new(_Num, _Denom) ->
 
 %%--------------------------------------------------------------------
 %% @doc
+%% Returns numerator `A' of the rational `Q = A/B'. Raises `badarg' on
+%% invalid input.
 %% @end
 %%--------------------------------------------------------------------
 -spec num(rational()) -> integer().
