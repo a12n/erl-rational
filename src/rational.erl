@@ -252,7 +252,7 @@ parse(Bytes) ->
 %% @doc
 %% @end
 %%--------------------------------------------------------------------
--spec gcd(non_neg_integer(), non_neg_integer()) -> non_neg_integer().
+-spec gcd(integer(), integer()) -> integer().
 
 gcd(A, 0) -> A;
 
