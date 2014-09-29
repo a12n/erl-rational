@@ -98,7 +98,8 @@ num(_Q) -> error(badarg).
 %%--------------------------------------------------------------------
 %% @doc
 %% For rational numbers `Q1' and `Q2' returns `true' if `Q1' equals
-%% `Q2'. Accepts plain integers as `Q1' and/or `Q2'.
+%% `Q2'. Accepts plain integers as `Q1' and/or `Q2'. Generates
+%% `badarith' error on invalid arguments.
 %% @end
 %%--------------------------------------------------------------------
 -spec eq(integer() | rational(),
@@ -122,7 +123,7 @@ eq(_Q1, _Q2) ->
 %% @doc
 %% For rational numbers `Q1' and `Q2' returns `true' if `Q1' is
 %% greater than or equal to `Q2'. Accepts plain integers as `Q1'
-%% and/or `Q2'.
+%% and/or `Q2'. Generates `badarith' error on invalid arguments.
 %% @end
 %%--------------------------------------------------------------------
 -spec ge(integer() | rational(),
@@ -134,7 +135,8 @@ ge(Q1, Q2) ->
 %%--------------------------------------------------------------------
 %% @doc
 %% For rational numbers `Q1' and `Q2' returns `true' if `Q1' is
-%% greater than `Q2'. Accepts plain integers as `Q1' and/or `Q2'.
+%% greater than `Q2'. Accepts plain integers as `Q1' and/or
+%% `Q2'. Generates `badarith' error on invalid arguments.
 %% @end
 %%--------------------------------------------------------------------
 -spec gt(integer() | rational(),
@@ -146,7 +148,8 @@ gt(Q1, Q2) ->
 %%--------------------------------------------------------------------
 %% @doc
 %% For rational numbers `Q1' and `Q2' returns `true' if `Q1' isn't
-%% equal to `Q2'. Accepts plain integers as `Q1' and/or `Q2'.
+%% equal to `Q2'. Accepts plain integers as `Q1' and/or
+%% `Q2'. Generates `badarith' error on invalid arguments.
 %% @end
 %%--------------------------------------------------------------------
 -spec ne(integer() | rational(),
@@ -158,7 +161,8 @@ ne(Q1, Q2) ->
 %%--------------------------------------------------------------------
 %% @doc
 %% For rational numbers `Q1' and `Q2' returns `true' if `Q1' is less
-%% than or equal to `Q2'. Accepts plain integers as `Q1' and/or `Q2'.
+%% than or equal to `Q2'. Accepts plain integers as `Q1' and/or
+%% `Q2'. Generates `badarith' error on invalid arguments.
 %% @end
 %%--------------------------------------------------------------------
 -spec le(integer() | rational(),
@@ -170,7 +174,8 @@ le(Q1, Q2) ->
 %%--------------------------------------------------------------------
 %% @doc
 %% For rational numbers `Q1' and `Q2' returns `true' if `Q1' is less
-%% than `Q2'. Accepts plain integers as `Q1' and/or `Q2'.
+%% than `Q2'. Accepts plain integers as `Q1' and/or `Q2'. Generates
+%% `badarith' error on invalid arguments.
 %% @end
 %%--------------------------------------------------------------------
 -spec lt(integer() | rational(),
