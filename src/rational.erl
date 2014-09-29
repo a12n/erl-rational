@@ -235,7 +235,10 @@ neg(Z) when is_integer(Z) ->
     neg(new(Z));
 
 neg({rational, A, B}) ->
-    {rational, -A, B}.
+    {rational, -A, B};
+
+neg(_Q) ->
+    error(badarith).
 
 %%--------------------------------------------------------------------
 %% @doc
