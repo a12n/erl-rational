@@ -207,6 +207,10 @@ lt(_Q1, _Q2) ->
 
 %%--------------------------------------------------------------------
 %% @doc
+%% For rational numbers `Q1' and `Q2' returns difference `Q1 -
+%% Q2'. Accepts plain integers as `Q1' and/or `Q2'. Raises `badarith'
+%% error on invalid input.
+%% @equiv sum(Q1, neg(Q2)).
 %% @end
 %%--------------------------------------------------------------------
 -spec diff(integer() | rational(),
@@ -217,6 +221,9 @@ diff(Q1, Q2) ->
 
 %%--------------------------------------------------------------------
 %% @doc
+%% For rational number `Q = a/b' returns the reciprocal `b/a'. Accepts
+%% plain integer as the argument. The argument must not be zero, or
+%% `badarith' error is raised.
 %% @end
 %%--------------------------------------------------------------------
 -spec inv(integer() | rational()) -> rational().
@@ -232,6 +239,9 @@ inv(_Q) ->
 
 %%--------------------------------------------------------------------
 %% @doc
+%% For rational number `Q = a/b' returns the negation `-a/b'. Accepts
+%% plain integer as the argument. Raises `badarith' error on invalid
+%% input.
 %% @end
 %%--------------------------------------------------------------------
 -spec neg(integer() | rational()) -> rational().
@@ -247,6 +257,9 @@ neg(_Q) ->
 
 %%--------------------------------------------------------------------
 %% @doc
+%% Product of the rational numbers `Q1' and `Q2'. Accepts plain
+%% integers as `Q1' and/or `Q2'. Raises `badarith' error on invalid
+%% input.
 %% @end
 %%--------------------------------------------------------------------
 -spec prod(integer() | rational(),
@@ -268,6 +281,10 @@ prod(_Q1, _Q2) ->
 
 %%--------------------------------------------------------------------
 %% @doc
+%% Quotient of division of two rational numbers `Q1' and `Q2'. Accepts
+%% plain integers as `Q1' and/or `Q2' arguments. Raises `badarith'
+%% error on invalid input or then `Q2' is zero.
+%% @equiv prod(Q1, inv(Q2)).
 %% @end
 %%--------------------------------------------------------------------
 -spec quot(integer() | rational(),
@@ -278,6 +295,9 @@ quot(Q1, Q2) ->
 
 %%--------------------------------------------------------------------
 %% @doc
+%% For rational numbers `Q1' and `Q2' returns sum `Q1 + Q2'. Accepts
+%% plain integers as `Q1' and/or `Q2'. Raises `badarith' error on
+%% invalid input.
 %% @end
 %%--------------------------------------------------------------------
 -spec sum(integer() | rational(),
