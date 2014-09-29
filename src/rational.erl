@@ -16,7 +16,7 @@
 -export([eq/2, ge/2, gt/2, ne/2, le/2, lt/2]).
 
 %% API
--export([diff/2, inv/1, neg/1, prod/2, quot/2, sum/2]).
+-export([diff/2, expt/2, inv/1, neg/1, prod/2, quot/2, sum/2]).
 
 %% API
 -export([format/1, parse/1]).
@@ -218,6 +218,41 @@ lt(_Q1, _Q2) ->
 
 diff(Q1, Q2) ->
     sum(Q1, neg(Q2)).
+
+%%--------------------------------------------------------------------
+%% @doc
+%% Exponentiation of rational number `Q' to the integer power
+%% `N'. Accepts plain integer as `Q' argument. Raises `badarith' on
+%% invalid input.
+%% @end
+%%--------------------------------------------------------------------
+-spec expt(integer() | rational(), integer()) -> rational().
+
+expt(Z, N) when is_integer(Z) ->
+    expt(new(Z), N);
+
+expt(Q, N) when is_integer(N), N < 0 ->
+    expt(inv(Q), -N);
+
+expt(_Q, 0) ->
+    new(1);
+
+expt(Q = {rational, A, B}, 1)
+  when is_integer(A),
+       is_integer(B) ->
+    Q;
+
+expt(Q, 2) ->
+    prod(Q, Q);
+
+expt(Q, N) when is_integer(N), (N rem 2) =:= 0 ->
+    expt(prod(Q, Q), N div 2);
+
+expt(Q, N) when is_integer(N) ->
+    prod(Q, expt(Q, N - 1));
+
+expt(_Q, _N) ->
+    error(badarith).
 
 %%--------------------------------------------------------------------
 %% @doc
@@ -634,6 +669,22 @@ diff_2_test_() ->
       ?_assertEqual(new(1), diff(new(12), new(11))),
       ?_assertEqual(new(-1), diff(11, new(12, 1))),
       ?_assertError(badarith, diff(1.23, 1)) ].
+
+expt_2_test_() ->
+    [ ?_assertError(badarith, expt(0, -1)),
+      ?_assertError(badarith, expt(ok, 12)),
+      ?_assertError(badarith, expt(new(12), false)),
+      ?_assertError(badarith, expt(ok, 1)),
+      ?_assertEqual(new(1), expt(0, 0)),
+      ?_assertEqual(new(1), expt(new(-12), 0)),
+      ?_assertEqual(new(1), expt(new(12), 0)),
+      ?_assertEqual(new(1, 4), expt(new(1, 2), 2)),
+      ?_assertEqual(new(4), expt(new(2), 2)),
+      ?_assertEqual(new(1, 4), expt(2, -2)),
+      ?_assertEqual(new(1, 65536), expt(2, -16)),
+      ?_assertEqual(new(65536), expt(2, 16)),
+      ?_assertEqual(new(32), expt(2, 5)),
+      ?_assertEqual(new(1, 32), expt(2, -5)) ].
 
 inv_1_test_() ->
     [ ?_assertError(badarith, inv(0)),
