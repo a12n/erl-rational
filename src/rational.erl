@@ -323,6 +323,8 @@ sum(_Q1, _Q2) ->
 
 %%--------------------------------------------------------------------
 %% @doc
+%% Formats given rational number `Q' as a binary string. Accepts plain
+%% integer as an argument. Raises `badarg' error on invalid input.
 %% @end
 %%--------------------------------------------------------------------
 -spec format(integer() | rational()) -> binary().
@@ -345,6 +347,9 @@ format(_Q) ->
 
 %%--------------------------------------------------------------------
 %% @doc
+%% Parses rational number from `Bytes' of binary string. Returns `{ok,
+%% Q}' on success or `{error, badarg}' if the string doesn't represent
+%% any rational number.
 %% @end
 %%--------------------------------------------------------------------
 -spec parse(binary()) -> {ok, rational()} | {error, badarg}.
