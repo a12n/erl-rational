@@ -379,6 +379,7 @@ parse(Bytes) ->
 
 %%--------------------------------------------------------------------
 %% @doc
+%% Returns rational number approximation to the given real number `X'.
 %% @end
 %%--------------------------------------------------------------------
 -spec from_float(float()) -> rational().
@@ -388,6 +389,8 @@ from_float(X) ->
 
 %%--------------------------------------------------------------------
 %% @doc
+%% Converts rational number `Q' to real number. Raises `badarg' error
+%% on invalid input.
 %% @end
 %%--------------------------------------------------------------------
 -spec to_float(rational()) -> float().
