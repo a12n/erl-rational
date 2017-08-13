@@ -338,10 +338,10 @@ format(_Q) -> error(badarg).
 -spec parse(binary()) -> rational().
 
 parse(Bytes) ->
-    case parse_integer(Bytes) of
+    case parse_integer_part(Bytes) of
         {Num, <<>>} -> new(Num);
         {Num, <<$/, Bytes1/bytes>>} ->
-            case parse_integer(Bytes1) of
+            case parse_integer_part(Bytes1) of
                 {Denom, <<>>} when Denom =/= 0 -> new(Num, Denom);
                 {_Denom, _Bytes2} -> throw(badarg)
             end;
@@ -420,35 +420,36 @@ normalize(Q) -> Q.
 %% @doc
 %% @end
 %%--------------------------------------------------------------------
--spec parse_integer(binary()) -> {integer(), binary()}.
+-spec parse_integer_part(binary()) -> {integer(), binary()}.
 
-parse_integer(<<$-, C, Other/bytes>>)
+parse_integer_part(<<$-, C, Other/bytes>>)
   when C >= $0, C =< $9 ->
-    {N, Bytes1} = parse_non_neg_integer(Other, C - $0),
+    {N, Bytes1} = parse_non_neg_integer_part(Other, C - $0),
     {-N, Bytes1};
 
-parse_integer(<<$+, C, Other/bytes>>)
+parse_integer_part(<<$+, C, Other/bytes>>)
   when C >= $0, C =< $9 ->
-    parse_non_neg_integer(Other, C - $0);
+    parse_non_neg_integer_part(Other, C - $0);
 
-parse_integer(<<C, Other/bytes>>)
+parse_integer_part(<<C, Other/bytes>>)
   when C >= $0, C =< $9 ->
-    parse_non_neg_integer(Other, C - $0);
+    parse_non_neg_integer_part(Other, C - $0);
 
-parse_integer(_Bytes) -> throw(badarg).
+parse_integer_part(_Bytes) -> throw(badarg).
 
 %%--------------------------------------------------------------------
 %% @priv
 %% @doc
 %% @end
 %%--------------------------------------------------------------------
--spec parse_non_neg_integer(binary(), non_neg_integer()) -> {non_neg_integer(), binary()}.
+-spec parse_non_neg_integer_part(binary(), non_neg_integer()) ->
+                                        {non_neg_integer(), binary()}.
 
-parse_non_neg_integer(<<C, Other/bytes>>, N)
+parse_non_neg_integer_part(<<C, Other/bytes>>, N)
   when C >= $0, C =< $9 ->
-    parse_non_neg_integer(Other, (N * 10) + (C - $0));
+    parse_non_neg_integer_part(Other, (N * 10) + (C - $0));
 
-parse_non_neg_integer(Bytes, N) -> {N, Bytes}.
+parse_non_neg_integer_part(Bytes, N) -> {N, Bytes}.
 
 %%--------------------------------------------------------------------
 %% @priv
