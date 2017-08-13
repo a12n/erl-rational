@@ -335,9 +335,9 @@ format(_Q) -> error(badarg).
 %% @todo from_string/1
 %% @end
 %%--------------------------------------------------------------------
--spec parse(binary()) -> rational().
+-spec parse(iodata()) -> rational().
 
-parse(Bytes) ->
+parse(Bytes) when is_binary(Bytes) ->
     case parse_integer_part(Bytes) of
         {Num, Num10, <<>>} when Num10 > 1 -> new(Num);
         {Num, Num10, <<$/, Bytes1/bytes>>} when Num10 > 1 ->
@@ -353,7 +353,9 @@ parse(Bytes) ->
                 {_Frac, _Frac10, _Bytes2} -> throw(badarg)
             end;
         {_Num, _Num10, _Bytes1} -> throw(badarg)
-    end.
+    end;
+
+parse(Bytes) when is_list(Bytes) -> parse(iolist_to_binary(Bytes)).
 
 %%%===================================================================
 %%% API
@@ -648,7 +650,10 @@ parse_1_test_() ->
       ?_assertThrow(badarg, parse(<<"1/0">>)),
       ?_assertEqual({rational, 0, 1}, parse(<<"0/1">>)),
       ?_assertEqual({rational, 0, 1}, parse(<<"0/-1">>)),
-      ?_assertEqual({rational, 0, 1}, parse(<<"-0/1">>)) ].
+      ?_assertEqual({rational, 0, 1}, parse(<<"-0/1">>)),
+      ?_assertEqual(new(33, 3), parse("33/3")),
+      ?_assertEqual(new(33, 3), parse(["33", $/, "3"]))
+    ].
 
 to_float_1_test_() ->
     [ ?_assertEqual(2.0, to_float(new(2))),
