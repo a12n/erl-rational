@@ -370,29 +370,30 @@ format(_Q) ->
 
 %%--------------------------------------------------------------------
 %% @doc
-%% Parses rational number from `Bytes' of binary string. Returns `{ok,
-%% Q}' on success or `{error, badarg}' if the string doesn't represent
-%% any rational number.
+%% Parses rational number from `Bytes' of binary string. Returns
+%% rational number `Q' on success or throws `badarg' atom if string
+%% doesn't represent any rational number.
+%% @todo from_string/1
 %% @end
 %%--------------------------------------------------------------------
--spec parse(binary()) -> {ok, rational()} | {error, badarg}.
+-spec parse(binary()) -> rational().
 
 parse(Bytes) ->
     parse_integer(
       Bytes,
       fun(<<>>, Num) ->
-              {ok, new(Num)};
+              new(Num);
          (<<$/, Bytes1/bytes>>, Num) ->
               parse_integer(
                 Bytes1,
                 fun(<<>>, Denom) when Denom =/= 0 ->
-                        {ok, new(Num, Denom)};
+                        new(Num, Denom);
                    (_Bytes2, _Denom) ->
-                        {error, badarg}
+                        throw(badarg)
                 end
                );
          (_Bytes1, _Num) ->
-              {error, badarg}
+              throw(badarg)
       end
      ).
 
@@ -474,7 +475,7 @@ normalize(Q) ->
 %% @doc
 %% @end
 %%--------------------------------------------------------------------
--spec parse_integer(binary(), fun()) -> {error, badarg}.
+-spec parse_integer(binary(), fun()) -> no_return().
 
 parse_integer(<<$-, C, Other/bytes>>, Fun)
   when C >= $0, C =< $9 ->
@@ -492,7 +493,7 @@ parse_integer(<<C, Other/bytes>>, Fun)
     parse_non_neg_integer(Other, C - $0, Fun);
 
 parse_integer(_Bytes, _Fun) ->
-    {error, badarg}.
+    throw(badarg).
 
 %%--------------------------------------------------------------------
 %% @priv
@@ -679,24 +680,24 @@ format_1_test_() ->
       ?_assertError(badarg, format({a, b, c})) ].
 
 parse_1_test_() ->
-    [ ?_assertEqual({ok, {rational, 1, 2}}, parse(<<"1/2">>)),
-      ?_assertEqual({ok, {rational, 0, 1}}, parse(<<"0">>)),
-      ?_assertEqual({ok, {rational, -1, 2}}, parse(<<"-1/2">>)),
-      ?_assertEqual({ok, {rational, -1, 2}}, parse(<<"1/-2">>)),
-      ?_assertEqual({ok, {rational, 1, 2}}, parse(<<"-1/-2">>)),
-      ?_assertEqual({ok, {rational, 1, 2}}, parse(<<"+1/+2">>)),
-      ?_assertEqual({ok, {rational, 355, 113}}, parse(<<"355/113">>)),
-      ?_assertEqual({ok, {rational, 355, 113}}, parse(<<"355/+113">>)),
-      ?_assertEqual({ok, {rational, 355, 113}}, parse(<<"+355/113">>)),
-      ?_assertEqual({error, badarg}, parse(<<>>)),
-      ?_assertEqual({error, badarg}, parse(<<".23">>)),
-      ?_assertEqual({error, badarg}, parse(<<"1.23">>)),
-      ?_assertEqual({error, badarg}, parse(<<" 1/2 ">>)),
-      ?_assertEqual({error, badarg}, parse(<<"1/2 z">>)),
-      ?_assertEqual({error, badarg}, parse(<<"1/0">>)),
-      ?_assertEqual({ok, {rational, 0, 1}}, parse(<<"0/1">>)),
-      ?_assertEqual({ok, {rational, 0, 1}}, parse(<<"0/-1">>)),
-      ?_assertEqual({ok, {rational, 0, 1}}, parse(<<"-0/1">>)) ].
+    [ ?_assertEqual({rational, 1, 2}, parse(<<"1/2">>)),
+      ?_assertEqual({rational, 0, 1}, parse(<<"0">>)),
+      ?_assertEqual({rational, -1, 2}, parse(<<"-1/2">>)),
+      ?_assertEqual({rational, -1, 2}, parse(<<"1/-2">>)),
+      ?_assertEqual({rational, 1, 2}, parse(<<"-1/-2">>)),
+      ?_assertEqual({rational, 1, 2}, parse(<<"+1/+2">>)),
+      ?_assertEqual({rational, 355, 113}, parse(<<"355/113">>)),
+      ?_assertEqual({rational, 355, 113}, parse(<<"355/+113">>)),
+      ?_assertEqual({rational, 355, 113}, parse(<<"+355/113">>)),
+      ?_assertThrow(badarg, parse(<<>>)),
+      ?_assertThrow(badarg, parse(<<".23">>)),
+      ?_assertThrow(badarg, parse(<<"1.23">>)),
+      ?_assertThrow(badarg, parse(<<" 1/2 ">>)),
+      ?_assertThrow(badarg, parse(<<"1/2 z">>)),
+      ?_assertThrow(badarg, parse(<<"1/0">>)),
+      ?_assertEqual({rational, 0, 1}, parse(<<"0/1">>)),
+      ?_assertEqual({rational, 0, 1}, parse(<<"0/-1">>)),
+      ?_assertEqual({rational, 0, 1}, parse(<<"-0/1">>)) ].
 
 to_float_1_test_() ->
     [ ?_assertEqual(2.0, to_float(new(2))),
