@@ -1,4 +1,2 @@
-.eunit/
-.rebar/
-ebin/
-rebar
+_build/
+rebar3

@@ -1,24 +1,31 @@
-.PHONY: all app clean distclean doc shell test
+REBAR ?= ./rebar3
 
-ERL ?= erl
-ERL_FLAGS ?= -smp -pa ebin/ -pa deps/*/ebin/
-REBAR ?= ./rebar
+.PHONY: all clean distclean doc shell test
+
 
 all: $(REBAR)
 	$(REBAR) compile
 
+
 clean: $(REBAR)
 	$(REBAR) clean
 
-distclean: clean
-	rm -rf .eunit .rebar ebin rebar
+distclean:
+	rm -fr _build/ doc/ rebar3
 
-rebar:
-	wget "https://github.com/rebar/rebar/releases/download/2.5.1/rebar" -O $@
-	chmod +x $@
+doc: $(REBAR)
+	$(REBAR) edoc
 
-shell:
-	$(ERL) $(ERL_FLAGS)
+shell: $(REBAR)
+	$(REBAR) shell
 
 test: $(REBAR)
 	$(REBAR) eunit
+	$(REBAR) proper
+	$(REBAR) cover
+
+
+./rebar3:
+	wget "https://github.com/erlang/rebar3/releases/download/3.3.5/rebar3" -O $@-part
+	chmod +x $@-part
+	mv $@-part $@
