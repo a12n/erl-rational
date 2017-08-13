@@ -345,6 +345,13 @@ parse(Bytes) ->
                 {Denom, Denom10, <<>>} when Denom =/= 0, Denom10 > 1 -> new(Num, Denom);
                 {_Denom, _Denom10, _Bytes2} -> throw(badarg)
             end;
+        {Int, Int10, <<$., Bytes1/bytes>>} ->
+            case parse_non_neg_integer_part(Bytes1, 0, 1) of
+                {_Frac, 1, <<>>} when Int10 > 1 -> new(Int);
+                {Frac, Frac10, <<>>} when Int < 0 -> new(Int * Frac10 - Frac, Frac10);
+                {Frac, Frac10, <<>>} when Frac10 > 1 -> new(Int * Frac10 + Frac, Frac10);
+                {_Frac, _Frac10, _Bytes2} -> throw(badarg)
+            end;
         {_Num, _Num10, _Bytes1} -> throw(badarg)
     end.
 
@@ -624,8 +631,8 @@ parse_1_test_() ->
       ?_assertEqual({rational, 355, 113}, parse(<<"355/+113">>)),
       ?_assertEqual({rational, 355, 113}, parse(<<"+355/113">>)),
       ?_assertThrow(badarg, parse(<<>>)),
-      ?_assertThrow(badarg, parse(<<".23">>)),
-      ?_assertThrow(badarg, parse(<<"1.23">>)),
+      ?_assertEqual(new(23, 100), parse(<<".23">>)),
+      ?_assertEqual(new(123, 100), parse(<<"1.23">>)),
       ?_assertThrow(badarg, parse(<<" 1/2 ">>)),
       ?_assertThrow(badarg, parse(<<"1/2 z">>)),
       ?_assertThrow(badarg, parse(<<"1/0">>)),
