@@ -339,17 +339,13 @@ format(_Q) -> error(badarg).
 
 parse(Bytes) ->
     case parse_integer(Bytes) of
-        {Num, <<>>} ->
-            new(Num);
+        {Num, <<>>} -> new(Num);
         {Num, <<$/, Bytes1/bytes>>} ->
             case parse_integer(Bytes1) of
-                {Denom, <<>>} when Denom =/= 0 ->
-                    new(Num, Denom);
-                {_Denom, _Bytes2} ->
-                    throw(badarg)
+                {Denom, <<>>} when Denom =/= 0 -> new(Num, Denom);
+                {_Denom, _Bytes2} -> throw(badarg)
             end;
-        {_Num, _Bytes1} ->
-            throw(badarg)
+        {_Num, _Bytes1} -> throw(badarg)
     end.
 
 %%%===================================================================
