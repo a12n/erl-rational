@@ -379,23 +379,19 @@ format(_Q) ->
 -spec parse(binary()) -> rational().
 
 parse(Bytes) ->
-    parse_integer(
-      Bytes,
-      fun(<<>>, Num) ->
-              new(Num);
-         (<<$/, Bytes1/bytes>>, Num) ->
-              parse_integer(
-                Bytes1,
-                fun(<<>>, Denom) when Denom =/= 0 ->
-                        new(Num, Denom);
-                   (_Bytes2, _Denom) ->
-                        throw(badarg)
-                end
-               );
-         (_Bytes1, _Num) ->
-              throw(badarg)
-      end
-     ).
+    case parse_integer(Bytes) of
+        {Num, <<>>} ->
+            new(Num);
+        {Num, <<$/, Bytes1/bytes>>} ->
+            case parse_integer(Bytes1) of
+                {Denom, <<>>} when Denom =/= 0 ->
+                    new(Num, Denom);
+                {_Denom, _Bytes2} ->
+                    throw(badarg)
+            end;
+        {_Num, _Bytes1} ->
+            throw(badarg)
+    end.
 
 %%%===================================================================
 %%% API
@@ -475,24 +471,22 @@ normalize(Q) ->
 %% @doc
 %% @end
 %%--------------------------------------------------------------------
--spec parse_integer(binary(), fun()) -> no_return().
+-spec parse_integer(binary()) -> {integer(), binary()}.
 
-parse_integer(<<$-, C, Other/bytes>>, Fun)
+parse_integer(<<$-, C, Other/bytes>>)
   when C >= $0, C =< $9 ->
-    parse_non_neg_integer(Other, C - $0,
-                          fun(Bytes1, N) ->
-                                  Fun(Bytes1, -N)
-                          end);
+    {N, Bytes1} = parse_non_neg_integer(Other, C - $0),
+    {-N, Bytes1};
 
-parse_integer(<<$+, C, Other/bytes>>, Fun)
+parse_integer(<<$+, C, Other/bytes>>)
   when C >= $0, C =< $9 ->
-    parse_non_neg_integer(Other, C - $0, Fun);
+    parse_non_neg_integer(Other, C - $0);
 
-parse_integer(<<C, Other/bytes>>, Fun)
+parse_integer(<<C, Other/bytes>>)
   when C >= $0, C =< $9 ->
-    parse_non_neg_integer(Other, C - $0, Fun);
+    parse_non_neg_integer(Other, C - $0);
 
-parse_integer(_Bytes, _Fun) ->
+parse_integer(_Bytes) ->
     throw(badarg).
 
 %%--------------------------------------------------------------------
@@ -500,15 +494,14 @@ parse_integer(_Bytes, _Fun) ->
 %% @doc
 %% @end
 %%--------------------------------------------------------------------
--spec parse_non_neg_integer(binary(), non_neg_integer(), fun()) ->
-                                   no_return().
+-spec parse_non_neg_integer(binary(), non_neg_integer()) -> {non_neg_integer(), binary()}.
 
-parse_non_neg_integer(<<C, Other/bytes>>, N, Fun)
+parse_non_neg_integer(<<C, Other/bytes>>, N)
   when C >= $0, C =< $9 ->
-    parse_non_neg_integer(Other, (N * 10) + (C - $0), Fun);
+    parse_non_neg_integer(Other, (N * 10) + (C - $0));
 
-parse_non_neg_integer(Bytes, N, Fun) ->
-    Fun(Bytes, N).
+parse_non_neg_integer(Bytes, N) ->
+    {N, Bytes}.
 
 %%--------------------------------------------------------------------
 %% @priv
