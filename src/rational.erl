@@ -55,11 +55,9 @@ denom(_Q) -> error(badarg).
 %%--------------------------------------------------------------------
 -spec new(integer()) -> rational().
 
-new(Num) when is_integer(Num) ->
-    {rational, Num, 1};
+new(Num) when is_integer(Num) -> {rational, Num, 1};
 
-new(_Num) ->
-    error(badarg).
+new(_Num) -> error(badarg).
 
 %%--------------------------------------------------------------------
 %% @doc
@@ -75,8 +73,7 @@ new(Num, Denom)
        is_integer(Denom), Denom =/= 0 ->
     normalize(reduce({rational, Num, Denom}));
 
-new(_Num, _Denom) ->
-    error(badarg).
+new(_Num, _Denom) -> error(badarg).
 
 %%--------------------------------------------------------------------
 %% @doc
@@ -104,17 +101,13 @@ num(_Q) -> error(badarg).
 -spec eq(integer() | rational(),
          integer() | rational()) -> boolean().
 
-eq(Q, Z) when is_integer(Z) ->
-    eq(Q, new(Z));
+eq(Q, Z) when is_integer(Z) -> eq(Q, new(Z));
 
-eq(Z, Q) when is_integer(Z) ->
-    eq(new(Z), Q);
+eq(Z, Q) when is_integer(Z) -> eq(new(Z), Q);
 
-eq({rational, A, B}, {rational, C, D}) ->
-    (A * D) =:= (B * C);
+eq({rational, A, B}, {rational, C, D}) -> (A * D) =:= (B * C);
 
-eq(_Q1, _Q2) ->
-    error(badarith).
+eq(_Q1, _Q2) -> error(badarith).
 
 %%--------------------------------------------------------------------
 %% @doc
@@ -126,8 +119,7 @@ eq(_Q1, _Q2) ->
 -spec ge(integer() | rational(),
          integer() | rational()) -> boolean().
 
-ge(Q1, Q2) ->
-    not(lt(Q1, Q2)).
+ge(Q1, Q2) -> not(lt(Q1, Q2)).
 
 %%--------------------------------------------------------------------
 %% @doc
@@ -139,8 +131,7 @@ ge(Q1, Q2) ->
 -spec gt(integer() | rational(),
          integer() | rational()) -> boolean().
 
-gt(Q1, Q2) ->
-    lt(Q2, Q1).
+gt(Q1, Q2) -> lt(Q2, Q1).
 
 %%--------------------------------------------------------------------
 %% @doc
@@ -152,8 +143,7 @@ gt(Q1, Q2) ->
 -spec ne(integer() | rational(),
          integer() | rational()) -> boolean().
 
-ne(Q1, Q2) ->
-    not(eq(Q1, Q2)).
+ne(Q1, Q2) -> not(eq(Q1, Q2)).
 
 %%--------------------------------------------------------------------
 %% @doc
@@ -165,8 +155,7 @@ ne(Q1, Q2) ->
 -spec le(integer() | rational(),
          integer() | rational()) -> boolean().
 
-le(Q1, Q2) ->
-    not(lt(Q2, Q1)).
+le(Q1, Q2) -> not(lt(Q2, Q1)).
 
 %%--------------------------------------------------------------------
 %% @doc
@@ -178,23 +167,17 @@ le(Q1, Q2) ->
 -spec lt(integer() | rational(),
          integer() | rational()) -> boolean().
 
-lt(Z, Q) when is_integer(Z) ->
-    lt(new(Z), Q);
+lt(Z, Q) when is_integer(Z) -> lt(new(Z), Q);
 
-lt(Q, Z) when is_integer(Z) ->
-    lt(Q, new(Z));
+lt(Q, Z) when is_integer(Z) -> lt(Q, new(Z));
 
-lt(Q1 = {rational, _A, B}, Q2) when B < 0 ->
-    lt(normalize(Q1), Q2);
+lt(Q1 = {rational, _A, B}, Q2) when B < 0 -> lt(normalize(Q1), Q2);
 
-lt(Q1, Q2 = {rational, _C, D}) when D < 0 ->
-    lt(Q1, normalize(Q2));
+lt(Q1, Q2 = {rational, _C, D}) when D < 0 -> lt(Q1, normalize(Q2));
 
-lt({rational, A, B}, {rational, C, D}) ->
-    (A * D) < (B * C);
+lt({rational, A, B}, {rational, C, D}) -> (A * D) < (B * C);
 
-lt(_Q1, _Q2) ->
-    error(badarith).
+lt(_Q1, _Q2) -> error(badarith).
 
 %%%===================================================================
 %%% API
@@ -211,8 +194,7 @@ lt(_Q1, _Q2) ->
 -spec diff(integer() | rational(),
            integer() | rational()) -> rational().
 
-diff(Q1, Q2) ->
-    sum(Q1, neg(Q2)).
+diff(Q1, Q2) -> sum(Q1, neg(Q2)).
 
 %%--------------------------------------------------------------------
 %% @doc
@@ -223,29 +205,21 @@ diff(Q1, Q2) ->
 %%--------------------------------------------------------------------
 -spec expt(integer() | rational(), integer()) -> rational().
 
-expt(Z, N) when is_integer(Z) ->
-    expt(new(Z), N);
+expt(Z, N) when is_integer(Z) -> expt(new(Z), N);
 
-expt(Q, N) when is_integer(N), N < 0 ->
-    expt(inv(Q), -N);
+expt(Q, N) when is_integer(N), N < 0 -> expt(inv(Q), -N);
 
-expt(_Q, 0) ->
-    new(1);
+expt(_Q, 0) -> new(1);
 
-expt(Q = {rational, _A, _B}, 1) ->
-    Q;
+expt(Q = {rational, _A, _B}, 1) -> Q;
 
-expt(Q, 2) ->
-    prod(Q, Q);
+expt(Q, 2) -> prod(Q, Q);
 
-expt(Q, N) when is_integer(N), (N rem 2) =:= 0 ->
-    expt(prod(Q, Q), N div 2);
+expt(Q, N) when is_integer(N), (N rem 2) =:= 0 -> expt(prod(Q, Q), N div 2);
 
-expt(Q, N) when is_integer(N) ->
-    prod(Q, expt(Q, N - 1));
+expt(Q, N) when is_integer(N) -> prod(Q, expt(Q, N - 1));
 
-expt(_Q, _N) ->
-    error(badarith).
+expt(_Q, _N) -> error(badarith).
 
 %%--------------------------------------------------------------------
 %% @doc
@@ -256,14 +230,11 @@ expt(_Q, _N) ->
 %%--------------------------------------------------------------------
 -spec inv(integer() | rational()) -> rational().
 
-inv(Z) when is_integer(Z), Z =/= 0 ->
-    inv(new(Z));
+inv(Z) when is_integer(Z), Z =/= 0 -> inv(new(Z));
 
-inv({rational, A, B}) when A =/= 0 ->
-    {rational, B, A};
+inv({rational, A, B}) when A =/= 0 -> {rational, B, A};
 
-inv(_Q) ->
-    error(badarith).
+inv(_Q) -> error(badarith).
 
 %%--------------------------------------------------------------------
 %% @doc
@@ -274,14 +245,11 @@ inv(_Q) ->
 %%--------------------------------------------------------------------
 -spec neg(integer() | rational()) -> rational().
 
-neg(Z) when is_integer(Z) ->
-    neg(new(Z));
+neg(Z) when is_integer(Z) -> neg(new(Z));
 
-neg({rational, A, B}) ->
-    {rational, -A, B};
+neg({rational, A, B}) -> {rational, -A, B};
 
-neg(_Q) ->
-    error(badarith).
+neg(_Q) -> error(badarith).
 
 %%--------------------------------------------------------------------
 %% @doc
@@ -293,17 +261,14 @@ neg(_Q) ->
 -spec prod(integer() | rational(),
            integer() | rational()) -> rational().
 
-prod(Q, Z) when is_integer(Z) ->
-    prod(Q, new(Z));
+prod(Q, Z) when is_integer(Z) -> prod(Q, new(Z));
 
-prod(Z, Q) when is_integer(Z) ->
-    prod(new(Z), Q);
+prod(Z, Q) when is_integer(Z) -> prod(new(Z), Q);
 
 prod({rational, A, B}, {rational, C, D}) ->
     normalize(reduce({rational, (A * C), (B * D)}));
 
-prod(_Q1, _Q2) ->
-    error(badarith).
+prod(_Q1, _Q2) -> error(badarith).
 
 %%--------------------------------------------------------------------
 %% @doc
@@ -316,8 +281,7 @@ prod(_Q1, _Q2) ->
 -spec quot(integer() | rational(),
            integer() | rational()) -> rational().
 
-quot(Q1, Q2) ->
-    prod(Q1, inv(Q2)).
+quot(Q1, Q2) -> prod(Q1, inv(Q2)).
 
 %%--------------------------------------------------------------------
 %% @doc
@@ -329,17 +293,14 @@ quot(Q1, Q2) ->
 -spec sum(integer() | rational(),
           integer() | rational()) -> rational().
 
-sum(Q, Z) when is_integer(Z) ->
-    sum(Q, new(Z));
+sum(Q, Z) when is_integer(Z) -> sum(Q, new(Z));
 
-sum(Z, Q) when is_integer(Z) ->
-    sum(new(Z), Q);
+sum(Z, Q) when is_integer(Z) -> sum(new(Z), Q);
 
 sum({rational, A, B}, {rational, C, D}) ->
     normalize(reduce({rational, (A * D) + (C * B), (B * D)}));
 
-sum(_Q1, _Q2) ->
-    error(badarith).
+sum(_Q1, _Q2) -> error(badarith).
 
 %%%===================================================================
 %%% API
@@ -353,8 +314,7 @@ sum(_Q1, _Q2) ->
 %%--------------------------------------------------------------------
 -spec format(integer() | rational()) -> binary().
 
-format(Z) when is_integer(Z) ->
-    integer_to_binary(Z);
+format(Z) when is_integer(Z) -> integer_to_binary(Z);
 
 format(Q = {rational, _A, _B}) ->
     case normalize(reduce(Q)) of
@@ -365,8 +325,7 @@ format(Q = {rational, _A, _B}) ->
               (integer_to_binary(D))/bytes>>
     end;
 
-format(_Q) ->
-    error(badarg).
+format(_Q) -> error(badarg).
 
 %%--------------------------------------------------------------------
 %% @doc
@@ -404,8 +363,7 @@ parse(Bytes) ->
 %%--------------------------------------------------------------------
 -spec from_float(float()) -> rational().
 
-from_float(X) ->
-    from_float(X, 21).
+from_float(X) -> from_float(X, 21).
 
 %%--------------------------------------------------------------------
 %% @doc
@@ -415,11 +373,9 @@ from_float(X) ->
 %%--------------------------------------------------------------------
 -spec to_float(rational()) -> float().
 
-to_float({rational, A, B}) ->
-    A / B;
+to_float({rational, A, B}) -> A / B;
 
-to_float(_Q) ->
-    error(badarg).
+to_float(_Q) -> error(badarg).
 
 %%%===================================================================
 %%% Internal functions
@@ -443,8 +399,7 @@ gcd(A, B) -> gcd(B, A rem B).
 %%--------------------------------------------------------------------
 -spec from_float(float(), non_neg_integer()) -> rational().
 
-from_float(X, 0) ->
-    new(trunc(X));
+from_float(X, 0) -> new(trunc(X));
 
 from_float(X, K) ->
     N = trunc(X),
@@ -460,11 +415,9 @@ from_float(X, K) ->
 %%--------------------------------------------------------------------
 -spec normalize(rational()) -> rational().
 
-normalize({rational, A, B}) when B < 0 ->
-    {rational, -A, -B};
+normalize({rational, A, B}) when B < 0 -> {rational, -A, -B};
 
-normalize(Q) ->
-    Q.
+normalize(Q) -> Q.
 
 %%--------------------------------------------------------------------
 %% @priv
@@ -486,8 +439,7 @@ parse_integer(<<C, Other/bytes>>)
   when C >= $0, C =< $9 ->
     parse_non_neg_integer(Other, C - $0);
 
-parse_integer(_Bytes) ->
-    throw(badarg).
+parse_integer(_Bytes) -> throw(badarg).
 
 %%--------------------------------------------------------------------
 %% @priv
@@ -500,8 +452,7 @@ parse_non_neg_integer(<<C, Other/bytes>>, N)
   when C >= $0, C =< $9 ->
     parse_non_neg_integer(Other, (N * 10) + (C - $0));
 
-parse_non_neg_integer(Bytes, N) ->
-    {N, Bytes}.
+parse_non_neg_integer(Bytes, N) -> {N, Bytes}.
 
 %%--------------------------------------------------------------------
 %% @priv
