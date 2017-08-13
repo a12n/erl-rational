@@ -20,6 +20,7 @@ shell: $(REBAR)
 	$(REBAR) shell
 
 test: $(REBAR)
+	$(REBAR) dialyzer
 	$(REBAR) eunit
 	$(REBAR) proper
 	$(REBAR) cover
