@@ -43,7 +43,7 @@
 %%--------------------------------------------------------------------
 -spec denom(rational()) -> integer().
 
-denom({rational, _A, B}) when is_integer(B) -> B;
+denom({rational, _A, B}) -> B;
 
 denom(_Q) -> error(badarg).
 
@@ -86,7 +86,7 @@ new(_Num, _Denom) ->
 %%--------------------------------------------------------------------
 -spec num(rational()) -> integer().
 
-num({rational, A, _B}) when is_integer(A) -> A;
+num({rational, A, _B}) -> A;
 
 num(_Q) -> error(badarg).
 
@@ -110,9 +110,7 @@ eq(Q, Z) when is_integer(Z) ->
 eq(Z, Q) when is_integer(Z) ->
     eq(new(Z), Q);
 
-eq({rational, A, B}, {rational, C, D})
-  when is_integer(A), is_integer(B),
-       is_integer(C), is_integer(D) ->
+eq({rational, A, B}, {rational, C, D}) ->
     (A * D) =:= (B * C);
 
 eq(_Q1, _Q2) ->
@@ -192,9 +190,7 @@ lt(Q1 = {rational, _A, B}, Q2) when B < 0 ->
 lt(Q1, Q2 = {rational, _C, D}) when D < 0 ->
     lt(Q1, normalize(Q2));
 
-lt({rational, A, B}, {rational, C, D})
-  when is_integer(A), is_integer(B),
-       is_integer(C), is_integer(D) ->
+lt({rational, A, B}, {rational, C, D}) ->
     (A * D) < (B * C);
 
 lt(_Q1, _Q2) ->
@@ -236,9 +232,7 @@ expt(Q, N) when is_integer(N), N < 0 ->
 expt(_Q, 0) ->
     new(1);
 
-expt(Q = {rational, A, B}, 1)
-  when is_integer(A),
-       is_integer(B) ->
+expt(Q = {rational, _A, _B}, 1) ->
     Q;
 
 expt(Q, 2) ->
@@ -305,9 +299,7 @@ prod(Q, Z) when is_integer(Z) ->
 prod(Z, Q) when is_integer(Z) ->
     prod(new(Z), Q);
 
-prod({rational, A, B}, {rational, C, D})
-  when is_integer(A), is_integer(B),
-       is_integer(C), is_integer(D) ->
+prod({rational, A, B}, {rational, C, D}) ->
     normalize(reduce({rational, (A * C), (B * D)}));
 
 prod(_Q1, _Q2) ->
@@ -343,9 +335,7 @@ sum(Q, Z) when is_integer(Z) ->
 sum(Z, Q) when is_integer(Z) ->
     sum(new(Z), Q);
 
-sum({rational, A, B}, {rational, C, D})
-  when is_integer(A), is_integer(B),
-       is_integer(C), is_integer(D) ->
+sum({rational, A, B}, {rational, C, D}) ->
     normalize(reduce({rational, (A * D) + (C * B), (B * D)}));
 
 sum(_Q1, _Q2) ->
@@ -366,8 +356,7 @@ sum(_Q1, _Q2) ->
 format(Z) when is_integer(Z) ->
     integer_to_binary(Z);
 
-format(Q = {rational, A, B})
-  when is_integer(A), is_integer(B) ->
+format(Q = {rational, _A, _B}) ->
     case normalize(reduce(Q)) of
         {rational, C, 1} ->
             integer_to_binary(C);
@@ -429,8 +418,7 @@ from_float(X) ->
 %%--------------------------------------------------------------------
 -spec to_float(rational()) -> float().
 
-to_float({rational, A, B})
-  when is_integer(A), is_integer(B) ->
+to_float({rational, A, B}) ->
     A / B;
 
 to_float(_Q) ->
@@ -688,8 +676,7 @@ format_1_test_() ->
       ?_assertEqual(<<"2">>, format(new(4, 2))),
       ?_assertEqual(<<"-2">>, format(new(-4, 2))),
       ?_assertError(badarg, format(ok)),
-      ?_assertError(badarg, format({a, b, c})),
-      ?_assertError(badarg, format({rational, true, false})) ].
+      ?_assertError(badarg, format({a, b, c})) ].
 
 parse_1_test_() ->
     [ ?_assertEqual({ok, {rational, 1, 2}}, parse(<<"1/2">>)),
