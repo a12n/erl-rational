@@ -16,7 +16,7 @@
 -export([eq/2, ge/2, gt/2, ne/2, le/2, lt/2]).
 
 %% API
--export([diff/2, expt/2, inv/1, neg/1, prod/2, quot/2, sum/2]).
+-export([sub/2, pow/2, inv/1, neg/1, mul/2, 'div'/2, add/2]).
 
 %% API
 -export([format/1, parse/1]).
@@ -188,13 +188,13 @@ lt(_Q1, _Q2) -> error(badarith).
 %% For rational numbers `Q1' and `Q2' returns difference `Q1 -
 %% Q2'. Accepts plain integers as `Q1' and/or `Q2'. Raises `badarith'
 %% error on invalid input.
-%% @equiv sum(Q1, neg(Q2)).
+%% @equiv add(Q1, neg(Q2)).
 %% @end
 %%--------------------------------------------------------------------
--spec diff(integer() | rational(),
-           integer() | rational()) -> rational().
+-spec sub(integer() | rational(),
+          integer() | rational()) -> rational().
 
-diff(Q1, Q2) -> sum(Q1, neg(Q2)).
+sub(Q1, Q2) -> add(Q1, neg(Q2)).
 
 %%--------------------------------------------------------------------
 %% @doc
@@ -203,23 +203,23 @@ diff(Q1, Q2) -> sum(Q1, neg(Q2)).
 %% invalid input.
 %% @end
 %%--------------------------------------------------------------------
--spec expt(integer() | rational(), integer()) -> rational().
+-spec pow(integer() | rational(), integer()) -> rational().
 
-expt(Z, N) when is_integer(Z) -> expt(new(Z), N);
+pow(Z, N) when is_integer(Z) -> pow(new(Z), N);
 
-expt(Q, N) when is_integer(N), N < 0 -> expt(inv(Q), -N);
+pow(Q, N) when is_integer(N), N < 0 -> pow(inv(Q), -N);
 
-expt(_Q, 0) -> new(1);
+pow(_Q, 0) -> new(1);
 
-expt(Q = {rational, _A, _B}, 1) -> Q;
+pow(Q = {rational, _A, _B}, 1) -> Q;
 
-expt(Q, 2) -> prod(Q, Q);
+pow(Q, 2) -> mul(Q, Q);
 
-expt(Q, N) when is_integer(N), (N rem 2) =:= 0 -> expt(prod(Q, Q), N div 2);
+pow(Q, N) when is_integer(N), (N rem 2) =:= 0 -> pow(mul(Q, Q), N div 2);
 
-expt(Q, N) when is_integer(N) -> prod(Q, expt(Q, N - 1));
+pow(Q, N) when is_integer(N) -> mul(Q, pow(Q, N - 1));
 
-expt(_Q, _N) -> error(badarith).
+pow(_Q, _N) -> error(badarith).
 
 %%--------------------------------------------------------------------
 %% @doc
@@ -258,30 +258,30 @@ neg(_Q) -> error(badarith).
 %% input.
 %% @end
 %%--------------------------------------------------------------------
--spec prod(integer() | rational(),
+-spec mul(integer() | rational(),
            integer() | rational()) -> rational().
 
-prod(Q, Z) when is_integer(Z) -> prod(Q, new(Z));
+mul(Q, Z) when is_integer(Z) -> mul(Q, new(Z));
 
-prod(Z, Q) when is_integer(Z) -> prod(new(Z), Q);
+mul(Z, Q) when is_integer(Z) -> mul(new(Z), Q);
 
-prod({rational, A, B}, {rational, C, D}) ->
+mul({rational, A, B}, {rational, C, D}) ->
     normalize(reduce({rational, (A * C), (B * D)}));
 
-prod(_Q1, _Q2) -> error(badarith).
+mul(_Q1, _Q2) -> error(badarith).
 
 %%--------------------------------------------------------------------
 %% @doc
 %% Quotient of division of two rational numbers `Q1' and `Q2'. Accepts
 %% plain integers as `Q1' and/or `Q2' arguments. Raises `badarith'
 %% error on invalid input or then `Q2' is zero.
-%% @equiv prod(Q1, inv(Q2)).
+%% @equiv mul(Q1, inv(Q2)).
 %% @end
 %%--------------------------------------------------------------------
--spec quot(integer() | rational(),
+-spec 'div'(integer() | rational(),
            integer() | rational()) -> rational().
 
-quot(Q1, Q2) -> prod(Q1, inv(Q2)).
+'div'(Q1, Q2) -> mul(Q1, inv(Q2)).
 
 %%--------------------------------------------------------------------
 %% @doc
@@ -290,17 +290,17 @@ quot(Q1, Q2) -> prod(Q1, inv(Q2)).
 %% invalid input.
 %% @end
 %%--------------------------------------------------------------------
--spec sum(integer() | rational(),
+-spec add(integer() | rational(),
           integer() | rational()) -> rational().
 
-sum(Q, Z) when is_integer(Z) -> sum(Q, new(Z));
+add(Q, Z) when is_integer(Z) -> add(Q, new(Z));
 
-sum(Z, Q) when is_integer(Z) -> sum(new(Z), Q);
+add(Z, Q) when is_integer(Z) -> add(new(Z), Q);
 
-sum({rational, A, B}, {rational, C, D}) ->
+add({rational, A, B}, {rational, C, D}) ->
     normalize(reduce({rational, (A * D) + (C * B), (B * D)}));
 
-sum(_Q1, _Q2) -> error(badarith).
+add(_Q1, _Q2) -> error(badarith).
 
 %%%===================================================================
 %%% API
@@ -410,7 +410,7 @@ from_float(X, K) ->
     N = trunc(X),
     case X - N of
         F when F == 0 -> new(N);
-        F -> sum(new(N), inv(from_float(1 / F, K - 1)))
+        F -> add(new(N), inv(from_float(1 / F, K - 1)))
     end.
 
 %%--------------------------------------------------------------------
@@ -559,27 +559,27 @@ ne_2_test_() ->
       ?_assertError(badarith, ne(1.23, 1.23)),
       ?_assertError(badarith, ne(ok, ok)) ].
 
-diff_2_test_() ->
-    [ ?_assertEqual(new(0), diff(1, 1)),
-      ?_assertEqual(new(1), diff(new(12), new(11))),
-      ?_assertEqual(new(-1), diff(11, new(12, 1))),
-      ?_assertError(badarith, diff(1.23, 1)) ].
+sub_2_test_() ->
+    [ ?_assertEqual(new(0), sub(1, 1)),
+      ?_assertEqual(new(1), sub(new(12), new(11))),
+      ?_assertEqual(new(-1), sub(11, new(12, 1))),
+      ?_assertError(badarith, sub(1.23, 1)) ].
 
-expt_2_test_() ->
-    [ ?_assertError(badarith, expt(0, -1)),
-      ?_assertError(badarith, expt(ok, 12)),
-      ?_assertError(badarith, expt(new(12), false)),
-      ?_assertError(badarith, expt(ok, 1)),
-      ?_assertEqual(new(1), expt(0, 0)),
-      ?_assertEqual(new(1), expt(new(-12), 0)),
-      ?_assertEqual(new(1), expt(new(12), 0)),
-      ?_assertEqual(new(1, 4), expt(new(1, 2), 2)),
-      ?_assertEqual(new(4), expt(new(2), 2)),
-      ?_assertEqual(new(1, 4), expt(2, -2)),
-      ?_assertEqual(new(1, 65536), expt(2, -16)),
-      ?_assertEqual(new(65536), expt(2, 16)),
-      ?_assertEqual(new(32), expt(2, 5)),
-      ?_assertEqual(new(1, 32), expt(2, -5)) ].
+pow_2_test_() ->
+    [ ?_assertError(badarith, pow(0, -1)),
+      ?_assertError(badarith, pow(ok, 12)),
+      ?_assertError(badarith, pow(new(12), false)),
+      ?_assertError(badarith, pow(ok, 1)),
+      ?_assertEqual(new(1), pow(0, 0)),
+      ?_assertEqual(new(1), pow(new(-12), 0)),
+      ?_assertEqual(new(1), pow(new(12), 0)),
+      ?_assertEqual(new(1, 4), pow(new(1, 2), 2)),
+      ?_assertEqual(new(4), pow(new(2), 2)),
+      ?_assertEqual(new(1, 4), pow(2, -2)),
+      ?_assertEqual(new(1, 65536), pow(2, -16)),
+      ?_assertEqual(new(65536), pow(2, 16)),
+      ?_assertEqual(new(32), pow(2, 5)),
+      ?_assertEqual(new(1, 32), pow(2, -5)) ].
 
 inv_1_test_() ->
     [ ?_assertError(badarith, inv(0)),
@@ -589,27 +589,27 @@ inv_1_test_() ->
       ?_assertEqual({rational, 2, -1}, inv(new(-1, 2))),
       ?_assertEqual({rational, 2, -1}, inv(new(1, -2))) ].
 
-prod_2_test_() ->
-    [ ?_assertEqual(new(1), prod(new(1, 2), 2)),
-      ?_assertEqual(new(1), prod(2, new(1, 2))),
-      ?_assertEqual(new(1), prod(new(3, 43), inv(new(3, 43)))),
-      ?_assertEqual(new(1), prod(new(-3, 43), inv(new(-3, 43)))),
-      ?_assertError(badarith, prod(1.23, 4)),
-      ?_assertError(badarith, prod(new(1), ok)) ].
+mul_2_test_() ->
+    [ ?_assertEqual(new(1), mul(new(1, 2), 2)),
+      ?_assertEqual(new(1), mul(2, new(1, 2))),
+      ?_assertEqual(new(1), mul(new(3, 43), inv(new(3, 43)))),
+      ?_assertEqual(new(1), mul(new(-3, 43), inv(new(-3, 43)))),
+      ?_assertError(badarith, mul(1.23, 4)),
+      ?_assertError(badarith, mul(new(1), ok)) ].
 
-quot_2_test_() ->
-    [ ?_assertEqual(new(1, 2), quot(1, 2)),
-      ?_assertEqual(new(-1, 4), quot(-1, new(4, 1))),
-      ?_assertError(badarith, quot(new(2), new(0))),
-      ?_assertError(badarith, quot(new(2), ok)),
-      ?_assertError(badarith, quot(new(2), 1.2)) ].
+div_2_test_() ->
+    [ ?_assertEqual(new(1, 2), 'div'(1, 2)),
+      ?_assertEqual(new(-1, 4), 'div'(-1, new(4, 1))),
+      ?_assertError(badarith, 'div'(new(2), new(0))),
+      ?_assertError(badarith, 'div'(new(2), ok)),
+      ?_assertError(badarith, 'div'(new(2), 1.2)) ].
 
-sum_2_test_() ->
-    [ ?_assertEqual(new(1), sum(new(1, 2), new(1, 2))),
-      ?_assertEqual(new(0), sum(1, -1)),
-      ?_assertEqual(new(1, 2), sum(new(1, 4), new(1, 4))),
-      ?_assertError(badarith, sum(1, 2.34)),
-      ?_assertError(badarith, sum(ok, 1.23)) ].
+add_2_test_() ->
+    [ ?_assertEqual(new(1), add(new(1, 2), new(1, 2))),
+      ?_assertEqual(new(0), add(1, -1)),
+      ?_assertEqual(new(1, 2), add(new(1, 4), new(1, 4))),
+      ?_assertError(badarith, add(1, 2.34)),
+      ?_assertError(badarith, add(ok, 1.23)) ].
 
 format_1_test_() ->
     [ ?_assertEqual(<<"1">>, format(1)),
