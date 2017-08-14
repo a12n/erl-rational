@@ -106,6 +106,36 @@ prop_distrib() ->
         )
       ).
 
+prop_expt_zero() ->
+    ?FORALL(
+       A,
+       rational(),
+       rational:eq(
+         rational:new(1),
+         rational:expt(A, 0)
+        )
+      ).
+
+prop_expt_one() ->
+    ?FORALL(
+       A,
+       rational(),
+       rational:eq(
+         A,
+         rational:expt(A, 1)
+        )
+      ).
+
+prop_expt_two() ->
+    ?FORALL(
+       A,
+       rational(),
+       rational:eq(
+         rational:prod(A, A),
+         rational:expt(A, 2)
+        )
+      ).
+
 rational() ->
     oneof([ integer(),
             ?LET({N, D}, {integer(), pos_integer()}, rational:new(N, D)) ]).
