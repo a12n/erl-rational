@@ -19,6 +19,9 @@
 -export([sub/2, pow/2, inv/1, neg/1, mul/2, 'div'/2, add/2]).
 
 %% API
+-export([min/2, max/2]).
+
+%% API
 -export([format/1, parse/1]).
 
 %% API
@@ -301,6 +304,44 @@ add({rational, A, B}, {rational, C, D}) ->
     normalize(reduce({rational, (A * D) + (C * B), (B * D)}));
 
 add(_Q1, _Q2) -> error(badarith).
+
+%%%===================================================================
+%%% API
+%%%===================================================================
+
+%%--------------------------------------------------------------------
+%% @doc
+%% Returns smaller of two rational numbers.
+%% @end
+%%--------------------------------------------------------------------
+-spec min(integer() | rational(), integer() | rational()) -> rational().
+
+min(Z, Q) when is_integer(Z) -> ?MODULE:min(new(Z), Q);
+
+min(Q, Z) when is_integer(Z) -> ?MODULE:min(Q, new(Z));
+
+min(Q1, Q2) ->
+    case le(Q1, Q2) of
+        true -> Q1;
+        false -> Q2
+    end.
+
+%%--------------------------------------------------------------------
+%% @doc
+%% Returns bigger of two rational numbers.
+%% @end
+%%--------------------------------------------------------------------
+-spec max(integer() | rational(), integer() | rational()) -> rational().
+
+max(Z, Q) when is_integer(Z) -> ?MODULE:max(new(Z), Q);
+
+max(Q, Z) when is_integer(Z) -> ?MODULE:max(Q, new(Z));
+
+max(Q1, Q2) ->
+    case ge(Q1, Q2) of
+        true -> Q1;
+        false -> Q2
+    end.
 
 %%%===================================================================
 %%% API
@@ -610,6 +651,18 @@ add_2_test_() ->
       ?_assertEqual(new(1, 2), add(new(1, 4), new(1, 4))),
       ?_assertError(badarith, add(1, 2.34)),
       ?_assertError(badarith, add(ok, 1.23)) ].
+
+min_2_test_() ->
+    [ ?_assertEqual(new(1), ?MODULE:min(1, 2)),
+      ?_assertEqual(new(-1, 2), ?MODULE:min(new(-1, 2), new(1, 2))),
+      ?_assertEqual(new(1, 2), ?MODULE:min(new(1, 2), new(3, 4)))
+    ].
+
+max_2_test_() ->
+    [ ?_assertEqual(new(2), ?MODULE:max(1, 2)),
+      ?_assertEqual(new(1, 2), ?MODULE:max(new(-1, 2), new(1, 2))),
+      ?_assertEqual(new(3, 4), ?MODULE:max(new(1, 2), new(3, 4)))
+    ].
 
 format_1_test_() ->
     [ ?_assertEqual(<<"1">>, format(1)),
