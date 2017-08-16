@@ -16,7 +16,7 @@
 -export([eq/2, ge/2, gt/2, ne/2, le/2, lt/2]).
 
 %% API
--export([sub/2, pow/2, inv/1, neg/1, mul/2, 'div'/2, add/2]).
+-export([sub/2, pow/2, inv/1, neg/1, abs/1, mul/2, 'div'/2, add/2]).
 
 %% API
 -export([min/2, max/2]).
@@ -271,6 +271,21 @@ neg(Z) when is_integer(Z) -> neg(new(Z));
 neg({rational, A, B}) -> {rational, -A, B};
 
 neg(_Q) -> error(badarith).
+
+%%--------------------------------------------------------------------
+%% @doc
+%% For rational number `Q = a/b' returns it's absolute value
+%% `abs(a)/b'. Accepts plain integer as the argument. Raises
+%% `badarith' error on invalid input.
+%% @end
+%%--------------------------------------------------------------------
+-spec abs(integer() | rational()) -> rational().
+
+abs(Z) when is_integer(Z) -> ?MODULE:abs(new(Z));
+
+abs({rational, A, B}) -> {rational, erlang:abs(A), B};
+
+abs(_Q) -> error(badarith).
 
 %%--------------------------------------------------------------------
 %% @doc
@@ -647,6 +662,11 @@ inv_1_test_() ->
       ?_assertEqual({rational, 1, 2}, inv(new(2, 1))),
       ?_assertEqual({rational, 2, -1}, inv(new(-1, 2))),
       ?_assertEqual({rational, 2, -1}, inv(new(1, -2))) ].
+
+abs_1_test_() ->
+    [ ?_assertEqual(new(1, 2), ?MODULE:abs(new(-1, 2))),
+      ?_assertEqual(new(1, 2), ?MODULE:abs(new(1, -2))),
+      ?_assertEqual(new(1, 2), ?MODULE:abs(new(1, 2))) ].
 
 mul_2_test_() ->
     [ ?_assertEqual(new(1), mul(new(1, 2), 2)),
