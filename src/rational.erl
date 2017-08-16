@@ -450,7 +450,9 @@ from_float(X) -> from_float(X, 21).
 %% on invalid input.
 %% @end
 %%--------------------------------------------------------------------
--spec to_float(rational()) -> float().
+-spec to_float(integer() | rational()) -> float().
+
+to_float(Z) when is_integer(Z) -> float(Z);
 
 to_float({rational, A, B}) -> A / B;
 
