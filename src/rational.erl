@@ -25,7 +25,7 @@
 -export([format/1, parse/1]).
 
 %% API
--export([from_float/1, to_float/1]).
+-export([from_float/1, to_float/1, to_integer/1]).
 
 %%%===================================================================
 %%% Types
@@ -457,6 +457,20 @@ to_float(Z) when is_integer(Z) -> float(Z);
 to_float({rational, A, B}) -> A / B;
 
 to_float(_Q) -> error(badarg).
+
+%%--------------------------------------------------------------------
+%% @doc
+%% Converts rational number `Q' to integer, truncating the fractional
+%% part. Raises `badarg' error on invalid input.
+%% @end
+%%--------------------------------------------------------------------
+-spec to_integer(integer() | rational()) -> integer().
+
+to_integer(Z) when is_integer(Z) -> Z;
+
+to_integer({rational, A, B}) -> A div B;
+
+to_integer(_Q) -> error(badarg).
 
 %%%===================================================================
 %%% Internal functions
