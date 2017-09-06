@@ -84,9 +84,11 @@ new(_Num, _Denom) -> error(badarg).
 %% invalid input.
 %% @end
 %%--------------------------------------------------------------------
--spec num(rational()) -> integer().
+-spec num(integer() | rational()) -> integer().
 
 num({rational, A, _B}) -> A;
+
+num(Z) when is_integer(Z) -> Z;
 
 num(_Q) -> error(badarg).
 
