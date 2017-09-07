@@ -142,7 +142,7 @@ eq(_Q1, _Q2) -> error(badarith).
 -spec ge(integer() | rational(),
          integer() | rational()) -> boolean().
 
-ge(Q1, Q2) -> not(lt(Q1, Q2)).
+ge(Q1, Q2) -> not lt(Q1, Q2).
 
 %%--------------------------------------------------------------------
 %% @doc
@@ -166,7 +166,7 @@ gt(Q1, Q2) -> lt(Q2, Q1).
 -spec ne(integer() | rational(),
          integer() | rational()) -> boolean().
 
-ne(Q1, Q2) -> not(eq(Q1, Q2)).
+ne(Q1, Q2) -> not eq(Q1, Q2).
 
 %%--------------------------------------------------------------------
 %% @doc
@@ -178,7 +178,7 @@ ne(Q1, Q2) -> not(eq(Q1, Q2)).
 -spec le(integer() | rational(),
          integer() | rational()) -> boolean().
 
-le(Q1, Q2) -> not(lt(Q2, Q1)).
+le(Q1, Q2) -> not lt(Q2, Q1).
 
 %%--------------------------------------------------------------------
 %% @doc
