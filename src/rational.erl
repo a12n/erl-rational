@@ -554,6 +554,8 @@ parse_non_neg_integer_part(Bytes, N, N10) -> {N, N10, Bytes}.
 %%--------------------------------------------------------------------
 -spec reduce(rational()) -> rational().
 
+reduce({rational, 0, _}) -> {rational, 0, 1};
+
 reduce({rational, A, B}) ->
     K = gcd(A, B),
     {rational, A div K, B div K}.
