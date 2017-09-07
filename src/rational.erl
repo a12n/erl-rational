@@ -31,7 +31,7 @@
 %%% Types
 %%%===================================================================
 
--opaque rational() :: {rational, integer(), integer()}.
+-opaque rational() :: {rational, integer(), pos_integer()}.
 -type t() :: rational().
 
 %%%===================================================================
