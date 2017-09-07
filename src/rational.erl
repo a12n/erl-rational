@@ -44,9 +44,11 @@
 %% error on invalid input.
 %% @end
 %%--------------------------------------------------------------------
--spec denom(rational()) -> integer().
+-spec denom(integer() | rational()) -> pos_integer().
 
 denom({rational, _A, B}) -> B;
+
+denom(Z) when is_integer(Z) -> 1;
 
 denom(_Q) -> error(badarg).
 
