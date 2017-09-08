@@ -298,8 +298,7 @@ abs(_Q) -> error(badarith).
 %% input.
 %% @end
 %%--------------------------------------------------------------------
--spec mul(integer() | rational(),
-           integer() | rational()) -> rational().
+-spec mul(integer() | rational(), integer() | rational()) -> rational().
 
 mul(Q, Z) when is_integer(Z) -> mul(Q, new(Z));
 
@@ -318,8 +317,7 @@ mul(_Q1, _Q2) -> error(badarith).
 %% @equiv mul(Q1, inv(Q2)).
 %% @end
 %%--------------------------------------------------------------------
--spec 'div'(integer() | rational(),
-           integer() | rational()) -> rational().
+-spec 'div'(integer() | rational(), integer() | rational()) -> rational().
 
 'div'(Q1, Q2) -> mul(Q1, inv(Q2)).
 
@@ -330,8 +328,7 @@ mul(_Q1, _Q2) -> error(badarith).
 %% invalid input.
 %% @end
 %%--------------------------------------------------------------------
--spec add(integer() | rational(),
-          integer() | rational()) -> rational().
+-spec add(integer() | rational(), integer() | rational()) -> rational().
 
 add(Q, Z) when is_integer(Z) -> add(Q, new(Z));
 
