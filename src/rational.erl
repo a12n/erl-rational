@@ -455,7 +455,13 @@ from_float(X) -> from_float(X, 21).
 
 to_float(Z) when is_integer(Z) -> float(Z);
 
-to_float({rational, A, B}) -> A / B;
+to_float({rational, A, B}) ->
+    try
+        A / B
+    catch
+        error : badarith when B =/= 0 ->
+            to_float({rational, A div 2, B div 2})
+    end;
 
 to_float(_Q) -> error(badarg).
 
@@ -766,12 +772,18 @@ parse_1_test_() ->
     ].
 
 to_float_1_test_() ->
+    Q = {rational,
+         198746429118453111163834476427055555233448572363269589949977456791981874738621320265237256421499501468122696938090717727342804389371650873130718856414178883291741264909921158794224870352976937132614070951177770715359549190556719453764608017161305207096018141137432521517923306660046691708181187467455286705509,
+         272123256001067691222410945834097160335967277266199945319944339620452672232631729412454610959835501864923678351393159261015176529118639423488000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000},
+    X = 730.3544432000818,
     [ ?_assertEqual(2.0, to_float(new(2))),
       ?_assertEqual(3.5, to_float(new(7, 2))),
       ?_assertEqual(-3.5, to_float(new(-7, 2))),
       ?_assertEqual(3.1415929203539825, to_float(new(355, 113))),
       ?_assertError(badarg, to_float(1.234)),
-      ?_assertError(badarg, to_float(ok)) ].
+      ?_assertError(badarg, to_float(ok)),
+      ?_assertEqual(X, to_float(Q)),
+      ?_assertError(badarith, to_float({rational, 1, 0})) ].
 
 from_float_1_test_() ->
     [ ?_assertEqual(new(7, 2), from_float(3.5)),
